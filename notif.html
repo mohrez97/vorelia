@@ -265,10 +265,21 @@
             height: 100%;
             z-index: 1;
         }
+         #top-loader{
+    position:fixed;
+    top:0;
+    left:0;
+    height:3px;
+    width:0%;
+    background:#9f8f59;
+    z-index:99999;
+    transition: width .3s ease;
+}
     </style>
 </head>
 <body class="loading-active">
 
+<div id="top-loader"></div>
     <div class="container">
         <header class="notif-header-bar">
             <div class="header-left-group">
@@ -293,7 +304,7 @@
                 </div>
             </div>
 
-            <div class="notif-card" onclick="window.open('product.html','_self')">
+            <div class="notif-card" onclick="startPageTransition('product.html')">
                 <div class="unread-indicator hide-on-loading"></div>
                 <div class="notif-visual-wrapper product-preview-container">
                     <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
@@ -356,6 +367,27 @@
                 if (typeof lucide !== 'undefined') { lucide.createIcons(); }
             }, 500);
         });
+
+        function startPageTransition(url){
+
+    const loader = document.getElementById("top-loader");
+
+    // شروع لودینگ
+    loader.style.width = "40%";
+
+    setTimeout(()=> {
+        loader.style.width = "80%";
+    }, 200);
+
+    setTimeout(()=> {
+        loader.style.width = "100%";
+    }, 500);
+
+    // انتقال صفحه
+    setTimeout(()=> {
+        window.location.href = url;
+    }, 700);
+}
     </script>
 </body>
 </html>

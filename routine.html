@@ -527,10 +527,21 @@ html, body {
             left: 0;
             top: 2px;
         }
+         #top-loader{
+    position:fixed;
+    top:0;
+    left:0;
+    height:3px;
+    width:0%;
+    background:#9f8f59;
+    z-index:99999;
+    transition: width .3s ease;
+}
     </style>
 </head>
 <body style="overflow-x: hidden;" class="loading-active">
 
+<div id="top-loader"></div>
     <div class="container">
         <header>
             <div class="logo">Vorelia</div>
@@ -575,7 +586,7 @@ html, body {
             </button>
         </section>
 
-        <section class="routine-timeline" id="routine-list" onclick="window.open('product.html','_self')">
+        <section class="routine-timeline" id="routine-list" onclick="startPageTransition('product.html')">
             
             <div class="product-card">
                 <div class="step-number">1</div>
@@ -771,6 +782,27 @@ html, body {
                 lucide.createIcons();
             }
         }
+
+        function startPageTransition(url){
+
+    const loader = document.getElementById("top-loader");
+
+    // شروع لودینگ
+    loader.style.width = "40%";
+
+    setTimeout(()=> {
+        loader.style.width = "80%";
+    }, 200);
+
+    setTimeout(()=> {
+        loader.style.width = "100%";
+    }, 500);
+
+    // انتقال صفحه
+    setTimeout(()=> {
+        window.location.href = url;
+    }, 700);
+}
     </script>
 </body>
 </html>

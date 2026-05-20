@@ -559,14 +559,25 @@ html, body {
             top: 0;
             border-radius: 50%;
         }
+         #top-loader{
+    position:fixed;
+    top:0;
+    left:0;
+    height:3px;
+    width:0%;
+    background:#9f8f59;
+    z-index:99999;
+    transition: width .3s ease;
+}
     </style>
 </head>
 <body class="loading-active">
 
+<div id="top-loader"></div>
     <div class="container">
         <div class="top-action-bar">
-            <button class="circle-action-btn" onclick="window.open('index.html','_self')"><i data-lucide="chevron-left" size="18"></i></button>
-            <div class="right-actions" onclick="window.open('share-match.html','_self')">
+            <button class="circle-action-btn" onclick="startPageTransition('index.html')"><i data-lucide="chevron-left" size="18"></i></button>
+            <div class="right-actions" onclick="startPageTransition('share-match.html')">
                 <button class="circle-action-btn"><i data-lucide="heart" style="width: 17px;"></i></button>
                 <button class="circle-action-btn"><i data-lucide="share-2" style="width: 17px;"></i></button>
             </div>
@@ -746,6 +757,27 @@ html, body {
                 this.classList.add('active');
             });
         });
+
+        function startPageTransition(url){
+
+    const loader = document.getElementById("top-loader");
+
+    // شروع لودینگ
+    loader.style.width = "40%";
+
+    setTimeout(()=> {
+        loader.style.width = "80%";
+    }, 200);
+
+    setTimeout(()=> {
+        loader.style.width = "100%";
+    }, 500);
+
+    // انتقال صفحه
+    setTimeout(()=> {
+        window.location.href = url;
+    }, 700);
+}
     </script>
 </body>
 </html>
