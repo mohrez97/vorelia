@@ -37,16 +37,31 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-        }
+    -webkit-overflow-scrolling: touch;
+}
+        ::-webkit-scrollbar {
+    display: none;
+}
+html, body {
+
+    width: 100%;
+
+    overflow-x: hidden;
+
+    position: relative;
+
+}
 
         body {
             background-color: var(--bg-color);
             font-family: var(--font-sans);
             color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: calc(100px + env(safe-area-inset-bottom));
-            overflow-x: hidden;
+            padding-top: calc(16px + env(safe-area-inset-top));
+            padding-bottom: calc(95px + env(safe-area-inset-bottom));
+            touch-action: pan-x pan-y;
             -webkit-text-size-adjust: 100%;
+            overscroll-behavior-x: none;
         }
 
         .container {

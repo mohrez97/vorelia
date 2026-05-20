@@ -40,8 +40,26 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-        }
+    -webkit-overflow-scrolling: touch;
 
+}
+
+/* مخفی کردن scrollbar اگر چیزی accidental بشه */
+
+::-webkit-scrollbar {
+
+    display: none;
+
+}
+html, body {
+
+    width: 100%;
+
+    overflow-x: hidden;
+
+    position: relative;
+
+}
         body {
             background-color: var(--bg-color);
             font-family: var(--font-sans);
@@ -49,7 +67,7 @@
             min-height: 100vh;
             padding-top: calc(12px + env(safe-area-inset-top));
             padding-bottom: calc(95px + env(safe-area-inset-bottom));
-            overflow-x: hidden; 
+            overscroll-behavior-x: none;
             -webkit-text-size-adjust: 100%;
         }
 
