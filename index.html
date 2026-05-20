@@ -575,6 +575,56 @@ html, body {
     font-weight:600;
     color:#007AFF;
 }
+#desktop-only{
+    position:fixed;
+    inset:0;
+    background:var(--bg-color);
+
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+    padding:24px;
+
+    z-index:9999;
+    color:#000;
+}
+
+/* LOGO */
+#desktop-only .logo{
+    font-size:3em;
+    font-weight:600;
+    letter-spacing:2px;
+    margin-bottom:16px;
+}
+
+/* TITLE */
+#desktop-only .title{
+    font-size:1.6em;
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+/* DESC */
+#desktop-only .desc{
+    font-size:14px;
+    color:#444;
+    line-height:1.5;
+    max-width:320px;
+}
+
+/* SHOW ONLY ON LARGE SCREENS */
+@media (min-width: 768px){
+    #desktop-only{
+        display:flex;
+    }
+
+    body > *:not(#desktop-only){
+        display:none !important;
+    }
+}
     </style>
 </head>
 <body class="loading-active">
@@ -728,6 +778,25 @@ html, body {
 
     <div class="share-action">
         Tap to contact founders →
+    </div>
+
+</div>
+
+<div id="desktop-only">
+
+    <div class="logo" style="text-align: center;">
+        <img src="VORELIA.png" alt="VORELIA " loading="lazy" style="width: 70%;margin: 0 0 20px 0;"/>
+        <br>
+        VORELIA
+    </div>
+
+    <div class="title">
+        Mobile Only Experience
+    </div>
+
+    <div class="desc">
+        This application is available only on mobile devices.<br/>
+        Please open it on your phone to continue.
     </div>
 
 </div>
