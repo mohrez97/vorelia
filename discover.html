@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia - Discover Products & Tips</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FAF6F0">
+
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #7E7E7E;
+            --accent-purple: #F3EDF7;
+            --accent-purple-dark: #8E759F;
+            --accent-green: #E8F5E9;
+            --accent-green-dark: #388E3C;
+            --border-color: #F5F0E9;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --card-radius: 16px;
+            --skeleton-base: #EFEBE4;
+            --skeleton-shimmer: #E5E0D8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            /* افزایش پدینگ پایینی برای جلوگیری از تداخل محتوا با نوار ناوبری جدید */
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: calc(20px + env(safe-area-inset-top)) 20px 0 20px;
+        }
+
+        /* Top Header Segment */
+        .discover-header {
+            margin-bottom: 20px;
+        }
+
+        .discover-header h1 {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        /* Search Layout Row with AI Chat Button */
+        .search-action-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: var(--card-bg);
+            border-radius: 100px;
+            padding: 12px 16px;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            border: 1px solid #EAE5DD;
+            flex: 1;
+        }
+
+        .search-input {
+            border: none;
+            background: none;
+            outline: none;
+            width: 100%;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* دکمه هوش مصنوعی کنار باکس سرچ */
+        .ai-chat-trigger-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--text-main);
+            color: #FFFFFF;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .ai-chat-trigger-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Horizontal Capsule Badges (Categories) */
+        .categories-scroll-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+            padding-bottom: 4px;
+            margin-top: 16px;
+        }
+        .categories-scroll-row::-webkit-scrollbar { display: none; }
+
+        .category-pill {
+            background-color: var(--card-bg);
+            border: 1px solid #EAE5DD;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .category-pill.active {
+            background-color: var(--text-main);
+            color: var(--card-bg);
+            border-color: var(--text-main);
+        }
+
+        /* Titles and Sections */
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Products Grid with Match Score */
+        .products-scroll-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            margin-bottom: 28px;
+            padding-bottom: 4px;
+        }
+        .products-scroll-row::-webkit-scrollbar { display: none; }
+
+        .product-discover-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            width: 156px;
+            flex-shrink: 0;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .product-img-holder {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: var(--skeleton-base);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-img-holder img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .match-score-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            z-index: 2;
+        }
+
+        /* ردیف دکمه هوش مصنوعی و اطلاعات محصول */
+        .product-footer-action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .product-meta-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .product-meta-info h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-meta-info p {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* دکمه کوچک هوش مصنوعی روی کارت محصول */
+        .product-ai-mini-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: var(--accent-purple);
+            color: var(--accent-purple-dark);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .product-ai-mini-btn:active {
+            background-color: #E5D9ED;
+        }
+
+        /* Minimal Twitter-Style Beauty & Skin Tips Feed Component */
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .tw-feed-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tw-feed-content {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        .tw-feed-content strong {
+            font-weight: 600;
+        }
+
+        .tw-feed-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: var(--text-muted);
+            padding-top: 6px;
+            border-top: 1px solid #FAF6F0;
+        }
+
+        .feed-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+         /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            z-index: 999;
+            padding-top: 12px;
+            padding-bottom: calc(14px + env(safe-area-inset-bottom));
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 500;
+            width: 60px;
+        }
+
+        .nav-item.active {
+            color: var(--text-main);
+        }
+
+        .nav-item.scan-item {
+            position: relative;
+            top: -2px;
+        }
+
+        .scan-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            background-color: var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            margin-bottom: 2px;
+        }
+
+        /* ========================================================
+           ✨ REAL-TIME SKELETON PERFORMANCE ENGINE
+        ======================================================== */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton-loading {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite linear;
+            color: transparent !important;
+            border-color: transparent !important;
+            border-radius: 4px;
+        }
+
+        .loading-active .hide-on-loading {
+            opacity: 0 !important;
+        }
+
+        .skeleton-img-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="loading-active">
+
+    <div class="container">
+        <header class="discover-header">
+            <h1 class="id-loading-target skeleton-loading" style="width: 140px; height: 38px;">Discover</h1>
+            
+            <div class="search-action-row">
+                <div class="search-bar-wrapper">
+                    <i data-lucide="search" size="16" style="color: var(--text-muted)"></i>
+                    <input type="text" class="search-input" placeholder="Search brands, ingredients, tips...">
+                </div>
+                <button class="ai-chat-trigger-btn hide-on-loading" onclick="alert('Opening Vorelia AI Assistant Chat...')">
+                    <i data-lucide="sparkles" size="18"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="categories-scroll-row">
+            <span class="category-pill active">All Products</span>
+            <span class="category-pill">Cleansers</span>
+            <span class="category-pill">Serums</span>
+            <span class="category-pill">Moisturizers</span>
+            <span class="category-pill">Sunscreens</span>
+        </div>
+
+        <div class="section-title">
+            <span class="id-loading-target skeleton-loading" style="width: 160px; height: 22px;">High Match for You</span>
+        </div>
+
+        <div class="products-scroll-row">
+            <div class="product-discover-card">
+                <div class="match-score-badge hide-on-loading">
+                    <i data-lucide="sparkles" style="width: 10px; height: 10px;"></i>
+                    <span>98% Match</span>
+                </div>
+                <div class="product-img-holder">
+                    <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
+                    <img class="product-render-img" src="s6.png" alt="Product 1">
+                </div>
+                <div class="product-footer-action-row">
+                    <div class="product-meta-info">
+                        <h4 class="id-loading-target skeleton-loading" style="width: 80px; height: 14px;">Hydrating Serum</h4>
+                        <p class="id-loading-target skeleton-loading" style="width: 50px; height: 10px; margin-top: 4px;">CeraVe</p>
+                    </div>
+                    <button class="product-ai-mini-btn hide-on-loading" onclick="alert('AI Analysis for CeraVe Hydrating Serum...')">
+                        <i data-lucide="sparkles"  style="width: 14px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="product-discover-card">
+                <div class="match-score-badge hide-on-loading">
+                    <i data-lucide="sparkles" style="width: 10px; height: 10px;"></i>
+                    <span>94% Match</span>
+                </div>
+                <div class="product-img-holder">
+                    <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
+                    <img class="product-render-img" src="s4.png" alt="Product 2">
+                </div>
+                <div class="product-footer-action-row">
+                    <div class="product-meta-info">
+                        <h4 class="id-loading-target skeleton-loading" style="width: 80px; height: 14px;">Gel Cleanser</h4>
+                        <p class="id-loading-target skeleton-loading" style="width: 65px; height: 10px; margin-top: 4px;">La Roche-Posay</p>
+                    </div>
+                    <button class="product-ai-mini-btn hide-on-loading" onclick="alert('AI Analysis for La Roche-Posay Gel Cleanser...')">
+                        <i data-lucide="sparkles" style="width: 14px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="product-discover-card">
+                <div class="match-score-badge hide-on-loading">
+                    <i data-lucide="sparkles" style="width: 10px; height: 10px;"></i>
+                    <span>89% Match</span>
+                </div>
+                <div class="product-img-holder">
+                    <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
+                    <img class="product-render-img" src="s5.png" alt="Product 3">
+                </div>
+                <div class="product-footer-action-row">
+                    <div class="product-meta-info">
+                        <h4 class="id-loading-target skeleton-loading" style="width: 80px; height: 14px;">Mineral SPF 50</h4>
+                        <p class="id-loading-target skeleton-loading" style="width: 50px; height: 10px; margin-top: 4px;">Isdin</p>
+                    </div>
+                    <button class="product-ai-mini-btn hide-on-loading" onclick="alert('AI Analysis for Isdin Mineral SPF 50...')">
+                        <i data-lucide="sparkles" style="width: 14px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span class="id-loading-target skeleton-loading" style="width: 140px; height: 22px;">Daily Skin & Beauty Tips</span>
+        </div>
+
+        <div class="feed-container">
+            <div class="tw-feed-card">
+                <p class="tw-feed-content id-loading-target skeleton-loading" style="width: 100%; height: 38px;">
+                    <strong>Double Cleansing</strong> is key if you wear mineral sunscreen or makeup. Start with an oil-based cleanser to break down lipids, then follow up with your standard water-based gel to clean the pores.
+                </p>
+                <div class="tw-feed-actions hide-on-loading">
+                    <button class="feed-action-btn"><i data-lucide="heart" size="14"></i> 412</button>
+                    <button class="feed-action-btn"><i data-lucide="bookmark" size="14"></i> Save</button>
+                </div>
+            </div>
+
+            <div class="tw-feed-card">
+                <p class="tw-feed-content id-loading-target skeleton-loading" style="width: 100%; height: 38px;">
+                    Apply your <strong>Hyaluronic Acid</strong> serum on slightly damp skin. If your face is completely dry, the molecule might pull moisture out from the deeper layers of your skin instead of the environment.
+                </p>
+                <div class="tw-feed-actions hide-on-loading">
+                    <button class="feed-action-btn"><i data-lucide="heart" size="14"></i> 689</button>
+                    <button class="feed-action-btn"><i data-lucide="bookmark" size="14"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-item ">
+            <i data-lucide="home" size="22" stroke-width="2"></i>
+            <span>Home</span>
+        </a>
+        <a href="discover.html" class="nav-item active">
+            <i data-lucide="search" size="22" stroke-width="2"></i>
+            <span>Discover</span>
+        </a>
+        <a href="s.html" class="nav-item scan-item">
+            <div class="scan-icon-wrapper">
+                <i data-lucide="scan" size="20" stroke-width="2.2"></i>
+            </div>
+            <span>Scan</span>
+        </a>
+        <a href="routine.html" class="nav-item">
+            <i data-lucide="container" size="22" stroke-width="2"></i>
+            <span>Routine</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i data-lucide="user" size="22" stroke-width="2"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // شبیه‌ساز دریافت داده شبکه برای نمایش فید استخوان‌بندی متحرک
+            setTimeout(() => {
+                document.body.classList.remove('loading-active');
+                
+                // حذف افکت‌های بارگذاری و آزادسازی فضاهای متنی
+                document.querySelectorAll('.id-loading-target').forEach(el => {
+                    el.classList.remove('skeleton-loading');
+                    el.style.width = '';
+                    el.style.height = '';
+                });
+
+                // رندر و آشکارسازی عکس‌ها و محصولات بدون آسیب زدن به لایوت
+                document.querySelectorAll('.product-render-img').forEach(img => img.style.opacity = '1');
+                document.querySelectorAll('.skeleton-img-placeholder').forEach(ph => ph.style.display = 'none');
+                
+                if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+            }, 600);
+        });
+    </script>
+</body>
+</html>

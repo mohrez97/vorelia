@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia - Scan Your Skin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FAF6F0">
+
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #7E7E7E;
+            --accent-purple: #F3EDF7;
+            --accent-purple-dark: #8E759F;
+            --border-color: #F5F0E9;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --card-radius: 16px;
+            --skeleton-base: #EFEBE4;
+            --skeleton-shimmer: #E5E0D8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: calc(20px + env(safe-area-inset-top)) 20px 0 20px;
+        }
+
+        /* Top Bar Segment */
+        .scan-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .circle-action-btn {
+            width: 36px;
+            height: 36px;
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        /* Main Intro Title */
+        .scan-intro-title {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .scan-intro-title h1 {
+            font-family: var(--font-serif);
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .scan-intro-title p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Steps Visual Progress Tracker */
+        .scan-steps-tracker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-node {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .step-node.active {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .step-icon-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #EFEBE4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .step-node.active .step-icon-badge {
+            background-color: var(--accent-purple-dark);
+            color: var(--card-bg);
+        }
+
+        .step-divider-line {
+            width: 30px;
+            height: 1px;
+            border-bottom: 1px dashed #D1C9BC;
+        }
+
+        /* Camera Viewport Canvas Holder */
+        .camera-viewport-wrapper {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            background-color: #000000;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        #camera-live-stream {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* افکت آینه‌ای طبیعی برای دوربین سلفی */
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Camera Overlays & Glass UI Hud */
+        .camera-hud-badge {
+            position: absolute;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 100px;
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 5;
+        }
+
+        .hud-face-clear { top: 16px; left: 16px; }
+        .hud-flash-toggle { top: 16px; right: 16px; cursor: pointer; border: none; }
+
+        /* Face Framing Alignment Target */
+        .face-oval-frame-target {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 72%;
+            height: 70%;
+            border: 1.5px solid rgba(255, 255, 255, 0.75);
+            border-radius: 50% / 50%;
+            box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.35);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .camera-alignment-prompt {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 3;
+            color: #FFFFFF;
+        }
+
+        .camera-alignment-prompt h3 {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+
+        .camera-alignment-prompt p {
+            font-size: 11px;
+            color: rgba(255,255,255,0.75);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        /* Floating Capture Button Cluster */
+        .trigger-capture-container {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4;
+        }
+
+        .outer-capture-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s ease;
+        }
+
+        .outer-capture-ring:active {
+            transform: scale(0.92);
+        }
+
+        .inner-capture-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Micro Example Thumbnail Badge */
+        .hud-thumbnail-preview-badge {
+            position: absolute;
+            bottom: 24px;
+            left: 20px;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .thumb-preview-frame {
+            width: 44px;
+            height: 52px;
+            border-radius: 8px;
+            border: 1.5px solid #FFFFFF;
+            object-fit: cover;
+            background-color: var(--skeleton-base);
+        }
+
+        .thumb-preview-label {
+            font-size: 9px;
+            color: #FFFFFF;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .flip-camera-action-btn {
+            position: absolute;
+            bottom: 28px;
+            right: 20px;
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 46px;
+            height: 34px;
+            border-radius: 100px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Analytics Specs Horizontal Row Status Block */
+        .analysis-features-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .analysis-card-title {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .analysis-metrics-grid-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: auto;
+            gap: 16px;
+            padding-bottom: 4px;
+        }
+
+        .analysis-metrics-grid-row::-webkit-scrollbar { display: none; }
+
+        .metric-icon-indicator-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .metric-mini-bubble-icon {
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-mini-bubble-label {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        /* Micro Tip Footer Banner Component */
+        .scan-tip-banner {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .tip-banner-spark-circle {
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-purple);
+            border-radius: var(--card-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            flex-shrink: 0;
+        }
+
+        .tip-banner-body-text h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: var(--text-main);
+        }
+
+        .tip-banner-body-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* ========================================================
+           ✨ REAL-TIME SKELETON PERFORMANCE ENGINE
+        ======================================================== */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton-loading {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite linear;
+        }
+
+        .loading-active .hide-on-loading {
+            opacity: 0 !important;
+        }
+
+        .camera-loading-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="loading-active">
+
+    <div class="container">
+        <header class="scan-header-bar">
+            <button class="circle-action-btn" onclick="window.open('index.html','_self')"><i data-lucide="chevron-left" size="18"></i></button>
+            <button class="circle-action-btn"><i data-lucide="help-circle" size="17"></i></button>
+        </header>
+
+        <div class="scan-intro-title">
+            <h1 class="id-loading-target skeleton-loading" style="width: 180px; height: 32px; margin: 0 auto 6px auto;">Scan Your Skin</h1>
+            <p class="id-loading-target skeleton-loading" style="width: 260px; height: 16px; margin: 0 auto;">Get personalized analysis and product recommendations powered by AI.</p>
+        </div>
+
+        <div class="scan-steps-tracker hide-on-loading">
+            <div class="step-node active">
+                <div class="step-icon-badge"><i data-lucide="camera" size="12"></i></div>
+                <span>Capture</span>
+            </div>
+            <div class="step-divider-line"></div>
+            <div class="step-node">
+                <div class="step-icon-badge"><i data-lucide="sparkles" size="12"></i></div>
+                <span>Analyze</span>
+            </div>
+            <div class="step-divider-line"></div>
+            <div class="step-node">
+                <div class="step-icon-badge"><i data-lucide="file-text" size="12"></i></div>
+                <span>Results</span>
+            </div>
+        </div>
+
+        <div class="camera-viewport-wrapper">
+            <div class="camera-loading-placeholder id-loading-target skeleton-loading"></div>
+
+            <video id="camera-live-stream" autoplay playsinline muted></video>
+
+            <div class="camera-hud-badge hud-face-clear hide-on-loading">
+                <i data-lucide="info" size="12"></i>
+                <span>Make sure your face is clear</span>
+            </div>
+
+            <button class="camera-hud-badge hud-flash-toggle hide-on-loading">
+                <i data-lucide="zap" size="12"></i>
+                <span>Flash</span>
+            </button>
+
+            <div class="face-oval-frame-target hide-on-loading"></div>
+
+            <div class="camera-alignment-prompt hide-on-loading">
+                <h3>Position your face in the frame</h3>
+                <p>Ensure good lighting and look straight</p>
+            </div>
+
+            <div class="hud-thumbnail-preview-badge hide-on-loading">
+                <img class="thumb-preview-frame" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" id="target-placeholder-img" alt="Good Example">
+                <span class="thumb-preview-label">Good example</span>
+            </div>
+
+            <div class="trigger-capture-container hide-on-loading">
+                <button class="outer-capture-ring" id="shutter-action-trigger">
+                    <div class="inner-capture-circle">
+                        <i data-lucide="camera" size="20"></i>
+                    </div>
+                </button>
+            </div>
+
+            <button class="flip-camera-action-btn hide-on-loading">
+                <i data-lucide="refresh-cw" size="14"></i>
+            </button>
+        </div>
+
+        <div class="analysis-features-card">
+            <div class="analysis-card-title id-loading-target skeleton-loading" style="width: 70px; height: 14px;">We analyze</div>
+            <div class="analysis-metrics-grid-row hide-on-loading">
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="shattered-glass" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Spots</span>
+                </div>
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="scan-face" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Pores</span>
+                </div>
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="dna" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Texture</span>
+                </div>
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="activity" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Wrinkles</span>
+                </div>
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="smile" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Redness</span>
+                </div>
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="eye" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Dark circles</span>
+                </div>
+                <div class="metric-icon-indicator-item">
+                    <div class="metric-mini-bubble-icon"><i data-lucide="droplet" style="width:16px;"></i></div>
+                    <span class="metric-mini-bubble-label">Hydration</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scan-tip-banner">
+            <div class="tip-banner-spark-circle hide-on-loading"><i data-lucide="sparkles" size="14"></i></div>
+            <div class="tip-banner-body-text">
+                <h4 class="id-loading-target skeleton-loading" style="width: 100px; height: 14px; margin-bottom: 4px;">Tips for best results</h4>
+                <p class="id-loading-target skeleton-loading" style="width: 240px; height: 24px;">Use natural light, remove makeup and keep your face relaxed.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const liveVideoFeed = document.getElementById('camera-live-stream');
+            const cameraPlaceholder = document.querySelector('.camera-loading-placeholder');
+
+            // شبیه‌ساز راه‌اندازی اولیه ماژول دوربین و حذف استخوان‌بندی صفحات استاتیک متنی
+            setTimeout(() => {
+                document.body.classList.remove('loading-active');
+                document.querySelectorAll('.id-loading-target').forEach(el => {
+                    if(!el.classList.contains('camera-loading-placeholder')) {
+                        el.classList.remove('skeleton-loading');
+                        el.style.width = '';
+                        el.style.height = '';
+                    }
+                });
+                if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+            }, 400);
+
+            // اتصال سخت‌افزاری به ماژول دوربین سلفی کاربر
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: "user",
+                        width: { ideal: 1080 },
+                        height: { ideal: 1440 }
+                    }, 
+                    audio: false 
+                })
+                .then(function(stream) {
+                    liveVideoFeed.srcObject = stream;
+                    liveVideoFeed.onloadedmetadata = function() {
+                        // حذف اسکلتون دوربین و نمایش فید نرم زنده سلفی
+                        cameraPlaceholder.style.display = 'none';
+                        liveVideoFeed.style.opacity = '1';
+                    };
+                })
+                .catch(function(err) {
+                    console.error("Camera Hardware Request Access Denied/Failed: ", err);
+                    // فال‌بک کاربردی در صورت عدم دسترسی به وب‌کم سخت‌افزاری
+                    cameraPlaceholder.classList.remove('skeleton-loading');
+                    cameraPlaceholder.style.background = '#222';
+                    cameraPlaceholder.innerHTML = '<div style="color:#FFF; text-align:center; padding-top:50%; font-size:12px;">Camera access denied or unavailable</div>';
+                });
+            } else {
+                console.error("WebRTC getUserMedia API Context Not Supported on current Browser Engine.");
+            }
+
+            // هندلر دکمه شاتر عکاسی (اکشن کلیک فرضی)
+            document.getElementById('shutter-action-trigger').addEventListener('click', () => {
+                alert('Capturing skin status for AI analysis...');
+            });
+        });
+    </script>
+</body>
+</html>

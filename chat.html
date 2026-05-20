@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html  dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia AI Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FAF6F0">
+
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #7E7E7E;
+            --accent-purple: #F3EDF7;
+            --accent-purple-dark: #8E759F;
+            --chat-user-bg: #F0EAE1;
+            --border-color: #EAE5DD;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --card-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            /* پدینگ پایینی برای باز شدن فضا بالای کیبورد و دکمه‌های ناوبری */
+            padding-bottom: calc(140px + env(safe-area-inset-bottom));
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Top Bar Header Navigation */
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: calc(12px + env(safe-area-inset-top)) 20px 12px 20px;
+            position: sticky;
+            top: 0;
+            background-color: rgba(250, 246, 240, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.01);
+        }
+
+        .header-btn {
+            width: 36px;
+            height: 36px;
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .header-center-title {
+            text-align: center;
+        }
+
+        .header-center-title h2 {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .header-subtitle {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 1px;
+        }
+
+        .sparkle-mini {
+            color: var(--accent-purple-dark);
+        }
+
+        /* Chat Stream Thread Messages View */
+        .chat-stream-wrapper {
+            padding: 20px 20px 10px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Base Message Row Setup */
+        .message-row {
+            display: flex;
+            width: 100%;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .message-row.user {
+            justify-content: flex-end;
+        }
+
+        .message-row.ai {
+            justify-content: flex-start;
+        }
+
+        /* AI Avatar Star Icon Indicator */
+        .ai-avatar-circle {
+            width: 32px;
+            height: 32px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            flex-shrink: 0;
+        }
+
+        /* Message Bubble Design */
+        .message-bubble {
+            max-width: 82%;
+            padding: 14px 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message-row.user .message-bubble {
+            background-color: var(--chat-user-bg);
+            color: var(--text-main);
+            border-radius: 16px 16px 4px 16px;
+        }
+
+        .message-row.ai .message-bubble {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border-radius: 4px 16px 16px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .message-timestamp {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .message-row.user .message-timestamp {
+            justify-content: flex-end;
+        }
+
+        /* Nested Internal Structural Guides (Inside AI Bubble) */
+        .ai-inner-list-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .ai-list-item-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .item-icon-box {
+            color: var(--accent-purple-dark);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .item-text-content h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .item-text-content p {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Action Mini Prompt Promo Banner inside AI Chat Bubble */
+        .ai-promo-action-card {
+            background-color: #FAF8F5;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid rgba(142, 117, 159, 0.08);
+        }
+
+        .promo-card-left h5 {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+
+        .promo-card-left p {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-purple-dark);
+        }
+
+        .promo-card-arrow {
+            color: var(--accent-purple-dark);
+        }
+
+        /* Interactive Choice Buttons Options Grid (Inside Bubble) */
+        .ai-interactive-options-grid {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .choice-pill-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .choice-pill-btn:active {
+            background-color: var(--accent-purple);
+            border-color: var(--accent-purple-dark);
+        }
+
+        /* Horizon Suggestive Suggestions Chips Row (Sticky Above Bar) */
+        .quick-suggestions-scroller-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 0 20px 12px 20px;
+            scrollbar-width: none; /* Hide standard firefox scrollbar */
+        }
+
+        .quick-suggestions-scroller-row::-webkit-scrollbar {
+            display: none; /* Hide standard chrome safari scrollbar */
+        }
+
+        .suggestion-chip-outline-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 100px;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-main);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        /* Fixed Footer Dynamic Typing Actions Consolidated Box */
+        .chat-bottom-dock-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(250, 246, 240, 0.9);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 200;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .input-bar-container {
+            padding: 0 20px calc(12px + env(safe-area-inset-bottom)) 20px;
+        }
+
+        .typing-input-pill-wrapper {
+            background-color: var(--card-bg);
+            border-radius: 100px;
+            padding: 6px 6px 6px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.01);
+        }
+
+        .typing-text-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            color: var(--text-main);
+            background: transparent;
+        }
+
+        .typing-text-input::placeholder {
+            color: #B2B2B2;
+        }
+
+        .submit-send-action-btn {
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-purple);
+            color: var(--accent-purple-dark);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-send-action-btn:active {
+            transform: scale(0.95);
+            background-color: var(--accent-purple-dark);
+            color: var(--card-bg);
+        }
+
+        /* Navigation Tab Bar Controls */
+        .bottom-nav-fixed-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.02);
+            padding-top: 8px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        .nav-link-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 9px;
+            font-weight: 500;
+            width: 55px;
+        }
+
+        .nav-link-item.active {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="chat-header">
+            <button class="header-btn" onclick="window.open('index.html','_self')"><i data-lucide="chevron-left" size="18"></i></button>
+            <div class="header-center-title">
+                <h2>Vorelia AI</h2>
+                <div class="header-subtitle">
+                    <span>Your personal skincare expert</span>
+                    <i data-lucide="sparkles" class="sparkle-mini" size="10" fill="currentColor"></i>
+                </div>
+            </div>
+            <button class="header-btn"><i data-lucide="more-horizontal" size="18"></i></button>
+        </header>
+
+        <section class="chat-stream-wrapper" id="chat-scroller-view">
+            
+            <div class="message-row ai">
+                <div class="ai-avatar-circle"><i data-lucide="sparkles" style="width: 15px;" fill="currentColor"></i></div>
+                <div class="message-bubble">
+                    <strong>I'm Vorelia AI ✨</strong>
+                    <p style="margin-top: 4px; color: var(--text-muted); font-size: 12.5px;">Ask me anything about your skin, ingredients, products, or routines.</p>
+                </div>
+            </div>
+
+            <div class="message-row user">
+                <div class="message-bubble">
+                    <p>What can I do about the dark spots on my cheeks?</p>
+                    <div class="message-timestamp">10:30 AM <i data-lucide="check-check" size="11"></i></div>
+                </div>
+            </div>
+
+            <div class="message-row ai">
+                <div class="ai-avatar-circle"><i data-lucide="sparkles" style="width: 15px;" fill="currentColor"></i></div>
+                <div class="message-bubble">
+                    <p>Dark spots are usually caused by sun exposure, acne marks, or inflammation. Here's what I recommend for you:</p>
+                    
+                    <div class="ai-inner-list-stack">
+                        <div class="ai-list-item-row">
+                            <i data-lucide="sun" class="item-icon-box" size="14"></i>
+                            <div class="item-text-content">
+                                <h4>Daily sun protection</h4>
+                                <p>Use SPF 50+ every morning to prevent further pigmentation.</p>
+                            </div>
+                        </div>
+
+                        <div class="ai-list-item-row">
+                            <i data-lucide="aperture" class="item-icon-box" size="14"></i>
+                            <div class="item-text-content">
+                                <h4>Brightening ingredients</h4>
+                                <p>Niacinamide, Vitamin C, Alpha Arbutin and Tranexamic Acid can help fade spots.</p>
+                            </div>
+                        </div>
+
+                        <div class="ai-list-item-row">
+                            <i data-lucide="activity" class="item-icon-box" size="14"></i>
+                            <div class="item-text-content">
+                                <h4>Consistency</h4>
+                                <p>It takes time! You'll see visible improvement in 6–8 weeks.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-promo-action-card">
+                        <div class="promo-card-left">
+                            <h5>Want a personalized routine to target dark spots?</h5>
+                            <p>Create my routine</p>
+                        </div>
+                        <i data-lucide="arrow-right" class="promo-card-arrow" size="14"></i>
+                    </div>
+                    
+                    <div class="message-timestamp">10:30 AM</div>
+                </div>
+            </div>
+
+            <div class="message-row user">
+                <div class="message-bubble">
+                    <p>Yes please! 🙌</p>
+                    <div class="message-timestamp">10:31 AM <i data-lucide="check-check" size="11"></i></div>
+                </div>
+            </div>
+
+            <div class="message-row ai">
+                <div class="ai-avatar-circle"><i data-lucide="sparkles"  style="width: 15px;" fill="currentColor"></i></div>
+                <div class="message-bubble">
+                    <p>Great! I'll create a personalized routine for you. Can you tell me your skin type?</p>
+                    
+                    <div class="ai-interactive-options-grid">
+                        <button class="choice-pill-btn" onclick="sendSkinType('Dry')">Dry</button>
+                        <button class="choice-pill-btn" onclick="sendSkinType('Oily')">Oily</button>
+                        <button class="choice-pill-btn" onclick="sendSkinType('Combination')">Combination</button>
+                        <button class="choice-pill-btn" onclick="sendSkinType('Sensitive')">Sensitive</button>
+                    </div>
+                    
+                    <div class="message-timestamp">10:31 AM</div>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="chat-bottom-dock-fixed">
+            <div class="quick-suggestions-scroller-row">
+                <button class="suggestion-chip-outline-btn">Which ingredient is best for acne?</button>
+                <button class="suggestion-chip-outline-btn">How often should I exfoliate?</button>
+                <button class="suggestion-chip-outline-btn">Is retinol good for sensitive skin?</button>
+            </div>
+
+            <div class="input-bar-container">
+                <div class="typing-input-pill-wrapper">
+                    <input type="text" class="typing-text-input" placeholder="Ask anything about your skin..." id="user-input-field">
+                    <button class="submit-send-action-btn" id="send-trigger-btn">
+                        <i data-lucide="arrow-up" size="16" stroke-width="2.5"></i>
+                    </button>
+                </div>
+            </div>
+
+           
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide SVG Icons Engine
+        lucide.createIcons();
+
+        // Autoscroll function layout calculation execution logic
+        function scrollToBottom() {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Action Trigger Interactive Function Event for Quick Buttons selection
+        function sendSkinType(type) {
+            console.log("Selected skin type:", type);
+            // اضافه کردن لاجیک ارسال یا ذخیره در دیتابیس لوکال
+            alert("Skin type selected: " + type);
+        }
+
+        // Input Submit Processing implementation mock demonstration
+        document.getElementById('send-trigger-btn').addEventListener('click', function() {
+            const field = document.getElementById('user-input-field');
+            if (field.value.trim() !== "") {
+                console.log("Sending query:", field.value);
+                field.value = "";
+                scrollToBottom();
+            }
+        });
+
+        // Run automatic viewport layout fitment alignment
+        window.addEventListener('load', scrollToBottom);
+    </script>
+</body>
+</html>

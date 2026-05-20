@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="fa" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="VORELIA.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Vorelia Demo">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#FAF6F0">
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #757575;
+            --accent-purple: #F3EDF7;
+            --accent-purple-dark: #8E759F;
+            --progress-bg: #EAE5DD;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --skeleton-base: #EFEBE4;
+            --skeleton-shimmer: #E5E0D8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-top: calc(12px + env(safe-area-inset-top));
+            padding-bottom: calc(95px + env(safe-area-inset-bottom));
+            overflow-x: hidden; 
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px; 
+            margin: 0 auto;
+            padding: 0 16px; 
+        }
+
+        /* Header Vorelia */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0 20px 0;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            letter-spacing: 3px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            color: var(--text-main);
+            padding: 4px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-purple-dark);
+            border-radius: 50%;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            margin-bottom: 12px; 
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-text-wrapper {
+            width: 65%;
+            position: relative;
+            z-index: 2;
+            min-width: 0;
+        }
+
+        .greeting {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 24px; 
+            line-height: 1.3;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+
+        .hero-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: -35px;
+            bottom: -10px; 
+            width: 53%; 
+            max-width: 240px;
+            height: auto;
+            z-index: 1;
+            pointer-events: none;
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+            transition: opacity 0.4s ease;
+        }
+
+        /* Action/Banner Card */
+        .action-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            gap: 12px;
+        }
+
+        .action-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .icon-box {
+            width: 42px;
+            height: 42px;
+            background-color: var(--accent-purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            flex-shrink: 0;
+        }
+
+        .action-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .action-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Section Headings */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        .section-link {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        /* Metrics System */
+        .metrics-scroll-wrapper {
+            width: 100vw;
+            margin-left: -16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            overflow-x: auto;
+            margin-bottom: 28px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .metrics-scroll-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .metrics-row {
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px 4px;
+            min-width: max-content;
+        }
+
+        .metric-card {
+            display: flex;
+            flex-direction: column;
+            width: 88px;
+            padding: 0 12px;
+            border-right: 1px solid #F5F0E9;
+        }
+
+        .metric-card:last-child {
+            border-right: none;
+        }
+
+        .metric-icon {
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .metric-status {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 3px;
+            background-color: var(--progress-bg);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: auto;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-purple-dark);
+            border-radius: 2px;
+        }
+
+        /* Horizontal Products Scroll */
+        .product-scroll-wrapper {
+            width: 100vw;
+            margin-left: -16px;
+            padding-left: 16px;
+            overflow-x: auto;
+            margin-bottom: 28px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .product-scroll-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-scroll {
+            display: flex;
+            gap: 12px;
+            padding-right: 16px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 14px;
+            width: 140px;
+            min-width: 140px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .fav-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .product-img-wrapper {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .product-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-brand {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .product-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.3;
+            margin-bottom: 10px;
+            height: 28px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            margin-top: auto;
+        }
+
+        .match-score {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            color: var(--accent-purple-dark);
+            font-weight: 600;
+        }
+
+        /* AI Prompt Card */
+        .ai-chat-card {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            margin-bottom: 10px;
+            gap: 12px;
+        }
+
+        /* ========================================================
+           📱 ULTRA-RESPONSIVE PREMIUM NAVIGATION BAR
+        ======================================================== */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between; /* توزیع کاملاً متناسب فضا */
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            z-index: 999;
+            padding-top: 10px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 500;
+            flex: 1; /* تخصیص فضای مساوی برای جلوگیری از مچاله شدن آیکون‌ها */
+            min-width: 0;
+            white-space: nowrap; /* جلوگیری از دوخطی شدن عنوان تب‌ها */
+        }
+
+        .nav-item span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .nav-item.active {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .nav-item.scan-item {
+            position: relative;
+            top: -5px; /* توازن بصری دکمه اسکن میانی */
+        }
+
+        .scan-icon-wrapper {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            margin-bottom: 2px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.scan-item:active .scan-icon-wrapper {
+            transform: scale(0.92);
+        }
+
+        /* 📱 بهینه‌سازی اختصاصی برای آیفون‌های بسیار کوچک (عرض زیر 360 پیکسل مانند iPhone SE) */
+        @media (max-width: 360px) {
+            .nav-bar {
+                padding-left: 4px;
+                padding-right: 4px;
+                padding-top: 8px;
+            }
+            .nav-item {
+                font-size: 9px; /* کوچک‌تر شدن ظریف فونت جهت جلوگیری از فشردگی */
+                gap: 2px;
+            }
+            .scan-icon-wrapper {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        /* ========================================================
+           ✨ SKELETON LOADING ENGINE
+        ======================================================== */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton-loading {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite linear;
+            color: transparent !important;
+            border-color: transparent !important;
+            border-radius: 4px;
+        }
+
+        .skeleton-img-placeholder {
+            width: 70px;
+            height: 80px;
+            background: var(--skeleton-base);
+            border-radius: 8px;
+        }
+
+        .loading-active .hide-on-loading {
+            opacity: 0 !important;
+        }
+    </style>
+</head>
+<body class="loading-active">
+
+    <div class="container">
+        <header onclick="window.open('notif.html','_self');">
+            <div class="logo">Vorelia</div>
+            <button class="notification-btn">
+                <i data-lucide="bell" size="22" stroke-width="1.8"></i>
+                <div class="notification-badge"></div>
+            </button>
+        </header>
+
+        <section class="hero-section">
+            <div class="hero-text-wrapper">
+                <div class="greeting id-loading-target skeleton-loading" style="width: 140px;">Good morning, Elaheh <span style="color:#D4AF37;">✦</span></div>
+                <h1 class="hero-title id-loading-target skeleton-loading" style="width: 100%; height: 32px; margin-bottom: 8px;">Let’s find what your skin truly needs.</h1>
+                <p class="hero-subtitle id-loading-target skeleton-loading" style="width: 180px;">AI-powered skincare recommendations just for you.</p>
+            </div>
+            <img class="hero-image hide-on-loading" src="s1.png" alt="Model Skin" id="hero-avatar">
+        </section>
+
+        <div class="action-card" onclick="window.open('scan.html','_self')">
+            <div class="action-left">
+                <div class="icon-box">
+                    <i data-lucide="sparkles" size="20"></i>
+                </div>
+                <div>
+                    <div class="action-title">Analyze my skin</div>
+                    <div class="action-desc">Get your personalized skin profile</div>
+                </div>
+            </div>
+            <i data-lucide="arrow-right" size="18" stroke-width="1.5"></i>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">Your skin at a glance</h2>
+            <a href="#" class="section-link">View full report</a>
+        </div>
+
+        <div class="metrics-scroll-wrapper">
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <i data-lucide="droplet" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+                    <span class="metric-label id-loading-target skeleton-loading">Hydration</span>
+                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">72</span>
+                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill hide-on-loading" style="width: 72%;"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <i data-lucide="sparkle" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+                    <span class="metric-label id-loading-target skeleton-loading">Brightness</span>
+                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">68</span>
+                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill hide-on-loading" style="width: 68%;"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <i data-lucide="waves" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+                    <span class="metric-label id-loading-target skeleton-loading">Texture</span>
+                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">65</span>
+                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Fair</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill hide-on-loading" style="width: 65%;"></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <i data-lucide="shield" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+                    <span class="metric-label id-loading-target skeleton-loading">Barrier</span>
+                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">80</span>
+                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Strong</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill hide-on-loading" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">Top matches for you</h2>
+            <a href="#" class="section-link">See all</a>
+        </div>
+
+        <div class="product-scroll-wrapper">
+            <div class="product-scroll">
+                
+                <div class="product-card" onclick="window.open('product.html','_self')">
+                    <button class="fav-btn hide-on-loading"><i data-lucide="heart" style="width: 20px;"></i></button>
+                    <div class="product-img-wrapper">
+                        <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
+                        <img class="product-img hide-on-loading" src="s2.png" alt="Product" style="display:none;">
+                    </div>
+                    <div class="product-brand id-loading-target skeleton-loading" style="width: 70px;">The Ordinary</div>
+                    <div class="product-name id-loading-target skeleton-loading" style="width: 100px; height: 14px; margin-top: 4px;">Niacinamide 10%</div>
+                    <div class="product-meta">
+                        <span class="match-score id-loading-target skeleton-loading" style="width: 60px;">96% match</span>
+                    </div>
+                </div>
+
+                <div class="product-card" onclick="window.open('product.html','_self')">
+                    <button class="fav-btn hide-on-loading"><i data-lucide="heart" style="width: 20px;"></i></button>
+                    <div class="product-img-wrapper">
+                        <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
+                        <img class="product-img hide-on-loading" src="s3.png" alt="Product" style="display:none;">
+                    </div>
+                    <div class="product-brand id-loading-target skeleton-loading" style="width: 70px;">SkinCeuticals</div>
+                    <div class="product-name id-loading-target skeleton-loading" style="width: 100px; height: 14px; margin-top: 4px;">C E Ferulic</div>
+                    <div class="product-meta">
+                        <span class="match-score id-loading-target skeleton-loading" style="width: 60px;">94% match</span>
+                    </div>
+                </div>
+
+                <div class="product-card" onclick="window.open('product.html','_self')">
+                    <button class="fav-btn hide-on-loading"><i data-lucide="heart" style="width: 20px;"></i></button>
+                    <div class="product-img-wrapper">
+                        <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
+                        <img class="product-img hide-on-loading" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=200" alt="Product" style="display:none;">
+                    </div>
+                    <div class="product-brand id-loading-target skeleton-loading" style="width: 70px;">La Roche-Posay</div>
+                    <div class="product-name id-loading-target skeleton-loading" style="width: 100px; height: 14px; margin-top: 4px;">Cicaplast Baume B5</div>
+                    <div class="product-meta">
+                        <span class="match-score id-loading-target skeleton-loading" style="width: 60px;">93% match</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ai-chat-card" onclick="window.open('chat.html','_self')">
+            <div class="action-left">
+                <div class="icon-box" style="background-color: rgba(142, 117, 159, 0.08);">
+                    <i data-lucide="message-square" size="20" style="color: var(--accent-purple-dark);"></i>
+                </div>
+                <div>
+                    <div class="action-title">Ask Vorelia AI</div>
+                    <div class="action-desc">Get answers about your skin, products, ingredients and more.</div>
+                </div>
+            </div>
+            <i data-lucide="arrow-right" size="18" stroke-width="1.5"></i>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="/index.html" class="nav-item active">
+            <i data-lucide="home" size="20" stroke-width="2"></i>
+            <span>Home</span>
+        </a>
+        <a href="discover.html" class="nav-item">
+            <i data-lucide="search" size="20" stroke-width="2"></i>
+            <span>Discover</span>
+        </a>
+        <a href="s.html" class="nav-item scan-item">
+            <div class="scan-icon-wrapper">
+                <i data-lucide="scan" size="18" stroke-width="2.2"></i>
+            </div>
+            <span>Scan</span>
+        </a>
+        <a href="routine.html" class="nav-item">
+            <i data-lucide="container" size="20" stroke-width="2"></i>
+            <span>Routine</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i data-lucide="user" size="20" stroke-width="2"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.remove('loading-active');
+                
+                document.querySelectorAll('.id-loading-target').forEach(el => {
+                    el.classList.remove('skeleton-loading');
+                    el.style.width = ''; 
+                    el.style.height = '';
+                });
+
+                document.querySelectorAll('.product-img').forEach(img => {
+                    img.style.display = 'block';
+                });
+                document.querySelectorAll('.skeleton-img-placeholder').forEach(ph => {
+                    ph.style.display = 'none';
+                });
+
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, 600); 
+        });
+    </script>
+</body>
+</html>

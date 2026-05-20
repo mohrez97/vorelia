@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia - Product Detail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FAF6F0">
+
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #7E7E7E;
+            --accent-purple: #F3EDF7;
+            --accent-purple-dark: #8E759F;
+            --border-color: #F5F0E9;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --card-radius: 16px;
+            --skeleton-base: #EFEBE4;
+            --skeleton-shimmer: #E5E0D8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: calc(100px + env(safe-area-inset-bottom));
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Top Bar Actions */
+        .top-action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: calc(16px + env(safe-area-inset-top)) 20px 12px 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .circle-action-btn {
+            width: 36px;
+            height: 36px;
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .right-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Product Gallery Hero Showcase */
+        .product-hero-showcase {
+            background-color: #FDFBF9;
+            width: 100%;
+            padding: calc(75px + env(safe-area-inset-top)) 20px 28px 20px; 
+            display: flex;
+            align-items: center; 
+            justify-content: space-between;
+            gap: 20px; 
+            position: relative;
+        }
+
+        .hero-left-gallery {
+            flex: 1.1; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 180px;
+        }
+
+        .main-product-large-img {
+            height: auto;
+            width: 100%;
+            max-height: 240px; 
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-meta-header {
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-full-name {
+            font-family: var(--font-serif);
+            font-size: 22px; 
+            font-weight: 400;
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+
+        .product-short-sub-desc {
+            font-size: 11px; 
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .match-pill-badge {
+            background: linear-gradient(135deg, rgba(189, 165, 205, 0.15) 0%, rgba(214, 192, 229, 0.25) 100%);
+            color: var(--accent-purple-dark);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 100px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(216, 186, 236, 0.25) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 8px rgba(142, 117, 159, 0.08);
+            animation: subtlePulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes subtlePulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.02); opacity: 0.95; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .rating-reviews-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .rating-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .reviews-count {
+            color: var(--text-muted);
+        }
+
+        .product-tags-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pill-tag-outline {
+            background-color: var(--card-bg);
+            border: 1px solid #EAE5DD;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Navigation Tabs Menu Header Segment */
+        .details-segment-tabs {
+            display: flex;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 10px;
+            position: sticky;
+            top: 0;
+            z-index: 9;
+        }
+
+        .segment-tab-item {
+            flex: 1;
+            background: none;
+            border: none;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 14px 0;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .segment-tab-item.active {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .segment-tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+        }
+
+        /* Main Content Blocks Wrapper */
+        .details-content-wrapper {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-card-block {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 18px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .block-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .block-title {
+            font-family: var(--font-serif);
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .block-action-link {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .block-paragraph-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        /* About This Product Icons Features Grid */
+        .features-horizontal-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            border-top: 1px solid #FAF6F0;
+            padding-top: 14px;
+        }
+
+        .feature-grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .feature-icon-circle {
+            width: 32px;
+            height: 32px;
+            background-color: #FAF8F5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            margin-bottom: 6px;
+        }
+
+        .feature-item-label {
+            font-size: 9px;
+            font-weight: 500;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+
+        /* Why It Matches Layout Section */
+        .match-analysis-layout {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .match-score-radial-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 5px solid var(--accent-purple);
+            border-top-color: var(--accent-purple-dark);
+            border-right-color: var(--accent-purple-dark);
+            border-bottom-color: var(--accent-purple-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .match-score-radial-box h2 {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .match-score-radial-box span {
+            font-size: 8px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .match-points-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .match-point-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .check-icon-purple {
+            color: var(--accent-purple-dark);
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        /* Key Ingredients Section list rows */
+        .ingredients-rows-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ingredient-row-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .ingredient-row-item .ingredient-item-left {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .ingredient-texture-thumb {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #FAF8F5;
+            object-fit: cover;
+            border: 1px solid #EAE5DD;
+            transition: opacity 0.3s ease;
+        }
+
+        .ingredient-meta-text h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 1px;
+        }
+
+        .ingredient-meta-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .chevron-arrow-gray {
+            color: #C5C5C5;
+        }
+
+        /* Floating Fixed Bottom Purchase CTA Action Bar */
+        .fixed-action-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0,0,0,0.02);
+            padding: 14px 20px calc(14px + env(safe-area-inset-bottom)) 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .pricing-display-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .current-active-price {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .original-struck-price {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .discount-badge-pill {
+            background-color: #FCEFF2;
+            color: var(--text-optional);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .primary-action-cta-btn {
+            background-color: var(--text-main);
+            color: var(--card-bg);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+
+        .primary-action-cta-btn:active {
+            transform: scale(0.97);
+            background-color: #000000;
+        }
+
+        .plus-icon-wrapper-white {
+            width: 18px;
+            height: 18px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ========================================================
+           ✨ REAL-TIME SKELETON PERFORMANCE ENGINE
+        ======================================================== */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton-loading {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite linear;
+            color: transparent !important;
+            border-color: transparent !important;
+            border-radius: 4px;
+        }
+
+        .circle-skeleton-mask {
+            border-radius: 50% !important;
+        }
+
+        .loading-active .hide-on-loading {
+            opacity: 0 !important;
+        }
+
+        .skeleton-hero-img-placeholder {
+            width: 130px;
+            height: 180px;
+            border-radius: 8px;
+            position: absolute;
+        }
+
+        .skeleton-thumb-placeholder {
+            width: 36px;
+            height: 36px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="loading-active">
+
+    <div class="container">
+        <div class="top-action-bar">
+            <button class="circle-action-btn" onclick="window.open('index.html','_self')"><i data-lucide="chevron-left" size="18"></i></button>
+            <div class="right-actions" onclick="window.open('share-match.html','_self')">
+                <button class="circle-action-btn"><i data-lucide="heart" style="width: 17px;"></i></button>
+                <button class="circle-action-btn"><i data-lucide="share-2" style="width: 17px;"></i></button>
+            </div>
+        </div>
+
+        <section class="product-hero-showcase">
+            <div class="hero-left-gallery">
+                <div class="skeleton-hero-img-placeholder id-loading-target skeleton-loading"></div>
+                <img class="main-product-large-img hide-on-loading" src="s2.png" alt="The Ordinary Product Detail" style="display:none;">
+            </div>
+            
+            <div class="product-meta-header">
+                <span class="match-pill-badge id-loading-target skeleton-loading" style="width: 90px; height: 22px;">✨ 96% MATCH</span>
+                <span class="brand-title id-loading-target skeleton-loading" style="width: 70px; height: 12px;">The Ordinary</span>
+                <h1 class="product-full-name id-loading-target skeleton-loading" style="width: 140px; height: 50px; margin-top:6px;">Niacinamide 10%<br>+ Zinc 1%</h1>
+                <p class="product-short-sub-desc id-loading-target skeleton-loading" style="width: 150px; height: 24px; margin-top:6px;">High-Strength Vitamin and Mineral Blemish Formula</p>
+                
+                <div class="rating-reviews-row">
+                    <span class="rating-score id-loading-target skeleton-loading" style="width: 40px; height: 14px;"><i data-lucide="star" size="13" fill="#DFA959" stroke="none"></i> 4.6</span>
+                    <span class="reviews-count id-loading-target skeleton-loading" style="width: 75px; height: 14px;">(1,234 reviews)</span>
+                </div>
+
+                <div class="product-tags-row hide-on-loading">
+                    <span class="pill-tag-outline">Fragrance Free</span>
+                    <span class="pill-tag-outline">Alcohol Free</span>
+                </div>
+            </div>
+        </section>
+
+        <nav class="details-segment-tabs">
+            <button class="segment-tab-item active">Overview</button>
+            <button class="segment-tab-item">Ingredients</button>
+            <button class="segment-tab-item">Why it matches</button>
+            <button class="segment-tab-item">Reviews</button>
+        </nav>
+
+        <div class="details-content-wrapper">
+            <div class="info-card-block">
+                <div class="block-header-row">
+                    <h3 class="block-title">About this product</h3>
+                </div>
+                <p class="block-paragraph-desc id-loading-target skeleton-loading" style="width: 100%; height: 48px;">A high-strength niacinamide formula that visibly balances sebum, reduces the appearance of blemishes, and improves skin texture over time.</p>
+                
+                <div class="features-horizontal-grid hide-on-loading">
+                    <div class="feature-grid-item">
+                        <div class="feature-icon-circle"><i data-lucide="rows" size="14"></i></div>
+                        <span class="feature-item-label">Minimizes pores</span>
+                    </div>
+                    <div class="feature-grid-item">
+                        <div class="feature-icon-circle"><i data-lucide="droplet" size="14"></i></div>
+                        <span class="feature-item-label">Controls oil</span>
+                    </div>
+                    <div class="feature-grid-item">
+                        <div class="feature-icon-circle"><i data-lucide="sparkles" size="14"></i></div>
+                        <span class="feature-item-label">Reduces blemishes</span>
+                    </div>
+                    <div class="feature-grid-item">
+                        <div class="feature-icon-circle"><i data-lucide="sun" size="14"></i></div>
+                        <span class="feature-item-label">Evens skin tone</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card-block">
+                <div class="block-header-row">
+                    <h3 class="block-title">Why it matches your skin</h3>
+                    <a href="#" class="block-action-link hide-on-loading">Learn more</a>
+                </div>
+                
+                <div class="match-analysis-layout">
+                    <div class="match-score-radial-box id-loading-target skeleton-loading circle-skeleton-mask" style="border: none;">
+                        <h2>96%</h2>
+                        <span>Match</span>
+                    </div>
+                    
+                    <div class="match-points-list">
+                        <div class="match-point-row">
+                            <i data-lucide="check-circle-2" class="check-icon-purple hide-on-loading" size="13"></i>
+                            <span class="id-loading-target skeleton-loading" style="width: 170px;">Great for your combination skin</span>
+                        </div>
+                        <div class="match-point-row">
+                            <i data-lucide="check-circle-2" class="check-icon-purple hide-on-loading" size="13"></i>
+                            <span class="id-loading-target skeleton-loading" style="width: 190px; margin-top: 2px;">Helps with oiliness and visible pores</span>
+                        </div>
+                        <div class="match-point-row">
+                            <i data-lucide="check-circle-2" class="check-icon-purple hide-on-loading" size="13"></i>
+                            <span class="id-loading-target skeleton-loading" style="width: 160px; margin-top: 2px;">Supports brighter, clearer skin</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card-block">
+                <div class="block-header-row">
+                    <h3 class="block-title">Key ingredients</h3>
+                    <a href="#" class="block-action-link hide-on-loading">See full list</a>
+                </div>
+                
+                <div class="ingredients-rows-stack">
+                    <div class="ingredient-row-item">
+                        <div class="ingredient-item-left">
+                            <div class="skeleton-thumb-placeholder id-loading-target skeleton-loading circle-skeleton-mask"></div>
+                            <img class="ingredient-texture-thumb hide-on-loading" src="s2.png" alt="Niacinamide" style="display:none;">
+                            <div class="ingredient-meta-text">
+                                <h4 class="id-loading-target skeleton-loading" style="width: 110px;">Niacinamide 10%</h4>
+                                <p class="id-loading-target skeleton-loading" style="width: 210px; height: 12px; margin-top: 4px;">Helps regulate oil production and improve skin texture and tone.</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="chevron-arrow-gray hide-on-loading" size="14"></i>
+                    </div>
+
+                    <div class="ingredient-row-item">
+                        <div class="ingredient-item-left">
+                            <div class="skeleton-thumb-placeholder id-loading-target skeleton-loading circle-skeleton-mask"></div>
+                            <img class="ingredient-texture-thumb hide-on-loading" src="s2.png" alt="Zinc PCA" style="display:none; filter: grayscale(1);">
+                            <div class="ingredient-meta-text">
+                                <h4 class="id-loading-target skeleton-loading" style="width: 90px;">Zinc PCA 1%</h4>
+                                <p class="id-loading-target skeleton-loading" style="width: 200px; height: 12px; margin-top: 4px;">Helps reduce excess oil and supports a clearer-looking complexion.</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="chevron-arrow-gray hide-on-loading" size="14"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="fixed-action-footer">
+            <div class="pricing-display-box">
+                <div class="current-active-price">
+                    <span>$6.80</span>
+                    <span class="discount-badge-pill">20% OFF</span>
+                </div>
+                <span class="original-struck-price">$8.50</span>
+            </div>
+            
+            <button class="primary-action-cta-btn">
+                <span>Add to routine</span>
+                <div class="plus-icon-wrapper-white">
+                    <i data-lucide="plus" style="width: 14px;" stroke-width="3"></i>
+                </div>
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // شبیه‌ساز مهندسی تأخیر شبکه برای نمایش استخوان‌بندی (یک ثانیه فرضی)
+            setTimeout(() => {
+                document.body.classList.remove('loading-active');
+                
+                // حذف کلاس‌های شیمر و محدودیت‌های لوکال ابعاد متون
+                document.querySelectorAll('.id-loading-target').forEach(el => {
+                    el.classList.remove('skeleton-loading');
+                    el.style.width = '';
+                    el.style.height = '';
+                });
+
+                // پدیدار شدن تصاویر اصلی فیکس شده
+                document.querySelectorAll('.main-product-large-img, .ingredient-texture-thumb').forEach(img => {
+                    img.style.display = 'block';
+                });
+                document.querySelectorAll('.skeleton-hero-img-placeholder, .skeleton-thumb-placeholder').forEach(ph => {
+                    ph.style.display = 'none';
+                });
+
+                // رندر وکتور آیکون‌ها
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, 1000);
+        });
+
+        // Sub Segment Horizontal Sticky Tab Navigation Toggle Effect
+        document.querySelectorAll('.segment-tab-item').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.segment-tab-item').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html  dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia - Premium Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FAF6F0">
+
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #7E7E7E;
+            --accent-purple: #F3EDF7;
+            --accent-purple-dark: #8E759F;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --card-radius: 16px;
+            --skeleton-base: #EFEBE4;
+            --skeleton-shimmer: #E5E0D8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-top: calc(16px + env(safe-area-inset-top));
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+            touch-action: pan-x pan-y;
+            -webkit-text-size-adjust: 100%;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0 20px 0;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            letter-spacing: 3px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 5px;
+            height: 5px;
+            background-color: var(--text-main);
+            border-radius: 50%;
+        }
+
+        /* Profile Hero */
+        .profile-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar-container {
+            width: 68px;
+            height: 68px;
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .user-meta h2 {
+            font-family: var(--font-serif);
+            font-size: 22px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .member-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background-color: var(--accent-purple);
+            color: var(--accent-purple-dark);
+            font-size: 9px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            border-radius: var(--card-radius);
+            padding: 14px 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            border-right: 1px solid rgba(170, 167, 167, 0.3);
+        }
+
+        .stat-item:last-child{
+            border: none;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .stat-status {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Skin Profile Card */
+        .skin-profile-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .card-date {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .profile-data-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr; 
+            gap: 24px; 
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-right: 4px; 
+        }
+
+        .radar-svg {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            overflow: visible;
+        }
+
+        .attr-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .attr-item {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .attr-icon-box {
+            color: var(--text-main);
+            margin-top: 1px;
+        }
+
+        .attr-content .label {
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        .attr-content .val {
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .profile-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; 
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #F5F0E9;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px; 
+            background-color: #F5F1EB; 
+            padding: 6px 12px; 
+            border-radius: 100px; 
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1; 
+            border: none;
+            white-space: nowrap;
+        }
+
+        .add-tag-btn {
+            background-color: transparent;
+            border: 1px dashed #C8C3BC;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-tag-btn:active {
+            background-color: rgba(0, 0, 0, 0.03);
+            transform: scale(0.96);
+        }
+
+        /* Skin Progress Banner */
+        .progress-banner {
+            background-color: #F3EDF7;
+            border-radius: var(--card-radius);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-info h4 {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 1px;
+        }
+
+        .progress-info p {
+            font-size: 10px;
+            color: var(--accent-purple-dark);
+        }
+
+        .progress-circle-metric {
+            width: 40px;
+            height: 40px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            border: 2px solid var(--accent-purple-dark);
+        }
+
+        /* Achievements & Favorites Grid */
+        .dual-columns {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr; 
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sub-card {
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 115px; 
+        }
+
+        .sub-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sub-card-title {
+            font-family: var(--font-serif);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .view-all-link {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .badges-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .badge-circle {
+            width: 28px;
+            height: 28px;
+            background-color: #F9F9F9;
+            border: 1px solid #EAEAEA;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .badge-circle.active {
+            background-color: var(--accent-purple);
+            border-color: transparent;
+            color: var(--accent-purple-dark);
+        }
+
+        .badge-name {
+            font-size: 7px;
+            font-weight: 500;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        /* Favorites Component */
+        .fav-products-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 42px;
+        }
+
+        .fav-prod-img {
+            height: 100%;
+            max-width: 24px;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        .fav-counter {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        /* Settings List */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--card-bg);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .settings-row-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border: none;
+            border-bottom: 1px solid #FAF6F0;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .settings-row-item:last-child {
+            border-bottom: none;
+        }
+
+        .row-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .row-icon {
+            color: var(--text-main);
+        }
+
+        .row-arrow {
+            color: #C5C5C5;
+        }
+
+        /* Bottom Navbar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.02);
+            z-index: 999;
+            padding-top: 10px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 9px;
+            font-weight: 500;
+            width: 55px;
+        }
+
+        .nav-item.active {
+            color: var(--text-main);
+        }
+
+        .nav-item.scan-item {
+            position: relative;
+            top: -2px;
+        }
+  @media (max-width: 360px) {
+            .nav-bar {
+                padding-left: 4px;
+                padding-right: 4px;
+                padding-top: 8px;
+            }
+            .nav-item {
+                font-size: 9px; /* کوچک‌تر شدن ظریف فونت جهت جلوگیری از فشردگی */
+                gap: 2px;
+            }
+            .scan-icon-wrapper {
+                width: 36px;
+                height: 36px;
+            }
+        }
+        .scan-icon-wrapper {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple-dark);
+            margin-bottom: 2px;
+        }
+
+        /* ========================================================
+           ✨ REAL-TIME SKELETON PERFORMANCE ENGINE
+        ======================================================== */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton-loading {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite linear;
+            color: transparent !important;
+            border-color: transparent !important;
+            border-radius: 4px;
+        }
+
+        .circle-skeleton-mask {
+            border-radius: 50% !important;
+        }
+
+        /* پنهان‌سازی آیکون‌ها و تصاویر تا اتمام لود بدون به هم ریختن لایوت */
+        .loading-active .hide-on-loading {
+            opacity: 0 !important;
+        }
+
+        /* ماسک استخوان‌بندی روی ساختار SVG رادار */
+        .loading-active .radar-chart-poly, .loading-active .radar-chart-lines {
+            display: none !important;
+        }
+    </style>
+</head>
+<body style="overflow-x: hidden;" class="loading-active">
+
+    <div class="container">
+        <header>
+            <div class="logo">Vorelia</div>
+            <button class="notification-btn">
+                <i data-lucide="bell" size="20" stroke-width="1.8"></i>
+                <div class="notification-badge"></div>
+            </button>
+        </header>
+
+        <section class="profile-hero">
+            <div class="profile-left">
+                <div class="avatar-container id-loading-target skeleton-loading circle-skeleton-mask">
+                    <img class="avatar-img hide-on-loading" src="https://www.amway.com/medias/LP-24ANAHMBRN-Category-Beauty-m-new.jpg?context=bWFzdGVyfGltYWdlc3wyNTYwOTd8aW1hZ2UvanBlZ3xzeXMtbWFzdGVyL2ltYWdlcy9oYTkvaDk5Lzk5NjIzNTI4Njk0MDYvTFBfMjRBTkFITUJSTl9DYXRlZ29yeV9CZWF1dHlfbV9uZXcuanBnfDY4MmFkM2IxMTMzNWRmZmJkMjkxODU2YjA1Zjg3NGFkMmU5OGQ4Y2Q1OGVhM2E1MmMxNTRmYTg4YWEwMmU5ZGY" alt="Elaheh" style="opacity: 0;">
+                </div>
+                <div class="user-meta">
+                    <h2 class="id-loading-target skeleton-loading" style="width: 110px; height: 24px;">Elaheh <i data-lucide="edit-3" class="edit-icon" style="color:#A0A0A0;width: 16px;"></i></h2>
+                    <div class="subtitle id-loading-target skeleton-loading" style="width: 90px; margin-top: 4px;">Skincare lover 💜</div>
+                    <div class="member-badge hide-on-loading">
+                        <i data-lucide="sparkles" style="width: 14px;" fill="currentColor"></i> VORELIA MEMBER
+                    </div>
+                </div>
+            </div>
+            <i data-lucide="chevron-right" size="18" style="color: #C5C5C5;"></i>
+        </section>
+
+        <section class="quick-stats">
+            <div class="stat-item">
+                <div class="stat-label">Skin Age</div>
+                <div class="stat-value id-loading-target skeleton-loading" style="width: 30px; margin: 0 auto;">23</div>
+                <div class="stat-status">Good</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Skin Score</div>
+                <div class="stat-value id-loading-target skeleton-loading" style="width: 30px; margin: 0 auto;">82</div>
+                <div class="stat-status">Good</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Routines</div>
+                <div class="stat-value id-loading-target skeleton-loading" style="width: 30px; margin: 0 auto;">1</div>
+                <div class="stat-status">Active</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Reviews</div>
+                <div class="stat-value id-loading-target skeleton-loading" style="width: 30px; margin: 0 auto;">14</div>
+                <div class="stat-status">Contributions</div>
+            </div>
+        </section>
+
+        <div class="skin-profile-card">
+            <div class="card-header">
+                <h3 class="card-title">My Skin Profile</h3>
+                <span class="card-date id-loading-target skeleton-loading" style="width: 90px;">Last updated: May 20, 2025</span>
+            </div>
+            
+            <div class="profile-data-layout">
+                <div class="chart-container">
+                    <svg class="radar-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="45" fill="none" class="id-loading-target skeleton-loading circle-skeleton-mask" id="radar-skeleton-mask" style="width:100px; height:100px; display:block; stroke:transparent;"/>
+                        
+                        <g class="radar-chart-lines">
+                            <polygon points="80,25 132,63 112,124 48,124 28,63" fill="none" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <polygon points="80,41 119,70 104,111 56,111 41,70" fill="none" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <polygon points="80,57 106,77 96,98 64,98 54,77" fill="none" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <line x1="80" y1="80" x2="80" y2="25" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <line x1="80" y1="80" x2="132" y2="63" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <line x1="80" y1="80" x2="112" y2="124" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <line x1="80" y1="80" x2="48" y2="124" stroke="#F5F0E9" stroke-width="0.8"/>
+                            <line x1="80" y1="80" x2="28" y2="63" stroke="#F5F0E9" stroke-width="0.8"/>
+                        </g>
+                        
+                        <g class="radar-chart-poly">
+                            <polygon points="80,40 115,68 101,111 54,115 49,70" fill="rgba(142, 117, 159, 0.18)" stroke="var(--accent-purple-dark)" stroke-width="1.2"/>
+                            <circle cx="80" cy="40" r="1.5" fill="var(--accent-purple-dark)"/>
+                            <circle cx="115" cy="68" r="1.5" fill="var(--accent-purple-dark)"/>
+                            <circle cx="101" cy="111" r="1.5" fill="var(--accent-purple-dark)"/>
+                            <circle cx="54" cy="115" r="1.5" fill="var(--accent-purple-dark)"/>
+                            <circle cx="49" cy="70" r="1.5" fill="var(--accent-purple-dark)"/>
+                        </g>
+                        
+                        <g class="hide-on-loading">
+                            <text x="80" y="10" font-size="6" text-anchor="middle" font-family="var(--font-sans)">
+                                <tspan x="80" font-weight="600" font-size="8">72</tspan>
+                                <tspan x="80" dy="7" font-size="8" font-weight="400" fill="var(--text-muted)">Hydration</tspan>
+                            </text>
+                            <text x="137" y="61" font-size="6" text-anchor="start" font-family="var(--font-sans)">
+                                <tspan x="137" font-weight="600" font-size="8">68</tspan>
+                                <tspan x="137" dy="7" font-size="8" font-weight="400" fill="var(--text-muted)">Brightness</tspan>
+                            </text>
+                            <text x="115" y="132" font-size="6" text-anchor="middle" font-family="var(--font-sans)">
+                                <tspan x="115" font-weight="600" font-size="8">65</tspan>
+                                <tspan x="115" dy="7" font-size="8" font-weight="400" fill="var(--text-muted)">Texture</tspan>
+                            </text>
+                            <text x="45" y="132" font-size="6" text-anchor="middle" font-family="var(--font-sans)">
+                                <tspan x="45" font-weight="600" font-size="8">80</tspan>
+                                <tspan x="45" dy="7" font-size="8" font-weight="400" fill="var(--text-muted)">Barrier</tspan>
+                            </text>
+                            <text x="23" y="61" font-size="6" text-anchor="end" font-family="var(--font-sans)">
+                                <tspan x="23" font-weight="600" font-size="8">60</tspan>
+                                <tspan x="23" dy="7" font-size="8" font-weight="400" fill="var(--text-muted)">Sensitivity</tspan>
+                            </text>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="attr-list">
+                    <div class="attr-item">
+                        <div class="attr-icon-box hide-on-loading"><i data-lucide="droplet" style="width: 13px;"></i></div>
+                        <div class="attr-content">
+                            <div class="label id-loading-target skeleton-loading">Skin Type</div>
+                            <div class="val id-loading-target skeleton-loading" style="width: 75px; height: 12px; margin-top:2px;">Combination</div>
+                        </div>
+                    </div>
+                    <div class="attr-item">
+                        <div class="attr-icon-box hide-on-loading"><i data-lucide="sun" style="width: 13px;"></i></div>
+                        <div class="attr-content">
+                            <div class="label id-loading-target skeleton-loading">Skin Tone</div>
+                            <div class="val id-loading-target skeleton-loading" style="width: 40px; height: 12px; margin-top:2px;">Light</div>
+                        </div>
+                    </div>
+                    <div class="attr-item">
+                        <div class="attr-icon-box hide-on-loading"><i data-lucide="activity" style="width: 13px;"></i></div>
+                        <div class="attr-content">
+                            <div class="label id-loading-target skeleton-loading">Concerns</div>
+                            <div class="val id-loading-target skeleton-loading" style="width: 80px; height: 12px; margin-top:2px;">Pores, Oily T-zone</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tags">
+                <span class="tag id-loading-target skeleton-loading" style="width:65px; height:22px;">Combination</span>
+                <span class="tag id-loading-target skeleton-loading" style="width:65px; height:22px;">Oily T-zone</span>
+                <span class="tag id-loading-target skeleton-loading" style="width:50px; height:22px;">Pores</span>
+                <button class="tag add-tag-btn hide-on-loading">
+                    <i data-lucide="plus" style="width: 13px;" stroke-width="2.5"></i>
+                    <span>Tag</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="progress-banner" onclick="window.open('share-match.html','_self')">
+            <div class="progress-info">
+                <h4>Skin Progress</h4>
+                <p class="id-loading-target skeleton-loading" style="width: 160px; height:12px;">Your skin is improving! Keep going ✨</p>
+            </div>
+            <div class="progress-circle-metric id-loading-target skeleton-loading circle-skeleton-mask" style="border:none;">82%</div>
+        </div>
+
+        <section class="dual-columns">
+            <div class="sub-card">
+                <div class="sub-card-header">
+                    <h4 class="sub-card-title">Achievements</h4>
+                    <a href="#" class="view-all-link">View all</a>
+                </div>
+                <div class="badges-row">
+                    <div class="badge-item">
+                        <div class="badge-circle active hide-on-loading"><i data-lucide="sparkles" style="width: 15px;"></i></div>
+                        <span class="badge-name id-loading-target skeleton-loading">Analysis</span>
+                    </div>
+                    <div class="badge-item">
+                        <div class="badge-circle active hide-on-loading"><i data-lucide="calendar" style="width: 15px;"></i></div>
+                        <span class="badge-name id-loading-target skeleton-loading">7-Day</span>
+                    </div>
+                    <div class="badge-item">
+                        <div class="badge-circle active hide-on-loading" style="background-color: #F7EFE5; color: #C2A378;"><i data-lucide="heart" style="width: 15px;"></i></div>
+                        <span class="badge-name id-loading-target skeleton-loading">Reviewer</span>
+                    </div>
+                    <div class="badge-item">
+                        <div class="badge-circle hide-on-loading" style="border-style: dashed; color: #CCC;"><span style="font-size:10px;">?</span></div>
+                        <span class="badge-name" style="color: var(--text-muted);">Next</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-card">
+                <div class="sub-card-header">
+                    <h4 class="sub-card-title">My Favorites</h4>
+                    <a href="#" class="view-all-link">View all</a>
+                </div>
+                <div class="fav-products-preview">
+                    <div class="skeleton-img-placeholder id-loading-target skeleton-loading" style="width:20px; height:35px; border-radius:4px;"></div>
+                    <div class="skeleton-img-placeholder id-loading-target skeleton-loading" style="width:20px; height:35px; border-radius:4px;"></div>
+                    <img class="fav-prod-img hide-on-loading" src="s2.png" alt="Fav 1" style="display:none;">
+                    <img class="fav-prod-img hide-on-loading" src="s3.png" alt="Fav 2" style="display:none;">
+                    <img class="fav-prod-img hide-on-loading" src="s5.png" alt="Fav 3" style="filter: hue-rotate(90deg); display:none;">
+                </div>
+                <div class="fav-counter id-loading-target skeleton-loading" style="width: 60px; margin: 4px auto 0 auto;">12 products</div>
+            </div>
+        </section>
+
+        <section class="settings-list">
+            <button class="settings-row-item">
+                <div class="row-item-left">
+                    <i data-lucide="user" class="row-icon" style="width: 15px;" stroke-width="1.8"></i>
+                    <span>Personal Information</span>
+                </div>
+                <i data-lucide="chevron-right" class="row-arrow" style="width: 14px;"></i>
+            </button>
+            <button class="settings-row-item">
+                <div class="row-item-left">
+                    <i data-lucide="history" class="row-icon" style="width: 15px;" stroke-width="1.8"></i>
+                    <span>Skin History</span>
+                </div>
+                <i data-lucide="chevron-right" class="row-arrow" style="width: 14px;"></i>
+            </button>
+            <button class="settings-row-item">
+                <div class="row-item-left">
+                    <i data-lucide="sliders" class="row-icon" style="width: 15px;" stroke-width="1.8"></i>
+                    <span>Preferences</span>
+                </div>
+                <i data-lucide="chevron-right" class="row-arrow" style="width: 14px;"></i>
+            </button>
+        </section>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-item">
+            <i data-lucide="home" size="20" stroke-width="2"></i>
+            <span>Home</span>
+        </a>
+        <a href="discover.html" class="nav-item">
+            <i data-lucide="search" size="20" stroke-width="2"></i>
+            <span>Discover</span>
+        </a>
+        <a href="s.html" class="nav-item scan-item">
+            <div class="scan-icon-wrapper">
+                <i data-lucide="scan" size="18" stroke-width="2.2"></i>
+            </div>
+            <span>Scan</span>
+        </a>
+        <a href="routine.html" class="nav-item">
+            <i data-lucide="container" size="20" stroke-width="2"></i>
+            <span>Routine</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <i data-lucide="user" size="20" stroke-width="2"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // شبیه‌ساز تأخیر لود دیتای سرور محلی (یک ثانیه ثابت فرضی برای همگام‌سازی بصری)
+            setTimeout(() => {
+                document.body.classList.remove('loading-active');
+                
+                // حذف کل ساختارهای اسکلت لودینگ شیمر
+                document.querySelectorAll('.id-loading-target').forEach(el => {
+                    el.classList.remove('skeleton-loading');
+                    el.style.width = '';
+                    el.style.height = '';
+                });
+
+                // رندر و جابه‌جایی چارت رادار و تصاویر لوکال ذخیره شده
+                document.getElementById('radar-skeleton-mask').style.display = 'none';
+                
+                const avatar = document.querySelector('.avatar-img');
+                avatar.style.opacity = '1';
+
+                document.querySelectorAll('.fav-prod-img').forEach(img => {
+                    img.style.display = 'block';
+                });
+                document.querySelectorAll('.skeleton-img-placeholder').forEach(ph => {
+                    ph.style.display = 'none';
+                });
+
+                // رندر زنده آیکون‌های وکتور لوکس سیستم
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, 1000);
+        });
+
+        // Toggle Navbar Activation Item State
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
