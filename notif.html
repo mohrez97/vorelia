@@ -55,7 +55,7 @@
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
-            padding: calc(20px + env(safe-area-inset-top)) 16px 0 16px; /* پدینگ بهینه برای دستگاه‌های باریک مثل SE */
+            padding: calc(20px + env(safe-area-inset-top)) 16px 0 16px; 
         }
 
         /* Top Header Bar */
@@ -97,7 +97,7 @@
 
         .notif-header-bar h1 {
             font-family: var(--font-serif);
-            font-size: 24px; /* اندازه بهینه برای انواع عرض آیفون */
+            font-size: 24px; 
             font-weight: 400;
             white-space: nowrap;
             overflow: hidden;
@@ -160,7 +160,7 @@
             z-index: 5;
         }
 
-        /* Container بخش آیکون یا عکس محصول */
+        /* Container */
         .notif-visual-wrapper {
             position: relative;
             width: 44px;
@@ -176,7 +176,6 @@
         .icon-routine { background-color: var(--accent-purple); color: var(--accent-purple-dark); }
         .icon-insight { background-color: #FFF9E6; color: #DFA959; }
         
-        /* استایل اختصاصی، بزرگ‌تر و بدون کادر عکس محصول کاملاً ریسپانسیو */
         .product-preview-container {
             width: 56px;          
             height: 56px;
@@ -198,8 +197,8 @@
             display: flex;
             flex-direction: column;
             gap: 3px;
-            min-width: 0; /* حیاتی برای جلوگیری از شکستن لایوت در ابعاد آیفون اس ای */
-            padding-right: 8px; /* ایجاد فاصله امن تا نقطه Unread */
+            min-width: 0; 
+            padding-right: 8px;
         }
 
         .notif-title {
@@ -222,7 +221,6 @@
             margin-top: 4px;
         }
 
-        /* بج درصد سازگاری بالای متن */
         .notif-match-badge {
             display: inline-flex;
             align-items: center;
@@ -350,7 +348,6 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            // شبیه‌ساز دریافت پاسخ شبکه (میکرو ترنزیشن اختصاصی متناسب با پردازنده‌های اپل)
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 
@@ -360,7 +357,6 @@
                     el.style.height = '';
                 });
 
-                // رندر بدون پرش و لود نرم عکس محصولات پس از حذف اسکلتون شیمر
                 document.querySelectorAll('.product-preview-img').forEach(img => img.style.opacity = '1');
                 document.querySelectorAll('.skeleton-img-placeholder').forEach(ph => ph.style.display = 'none');
 
@@ -372,7 +368,6 @@
 
     const loader = document.getElementById("top-loader");
 
-    // شروع لودینگ
     loader.style.width = "40%";
 
     setTimeout(()=> {
@@ -383,7 +378,6 @@
         loader.style.width = "100%";
     }, 500);
 
-    // انتقال صفحه
     setTimeout(()=> {
         window.location.href = url;
     }, 700);

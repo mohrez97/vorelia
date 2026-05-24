@@ -540,7 +540,7 @@ html, body {
                 padding-top: 8px;
             }
             .nav-item {
-                font-size: 9px; /* کوچک‌تر شدن ظریف فونت جهت جلوگیری از فشردگی */
+                font-size: 9px;
                 gap: 2px;
             }
             .scan-icon-wrapper {
@@ -581,12 +581,9 @@ html, body {
             border-radius: 50% !important;
         }
 
-        /* پنهان‌سازی آیکون‌ها و تصاویر تا اتمام لود بدون به هم ریختن لایوت */
         .loading-active .hide-on-loading {
             opacity: 0 !important;
         }
-
-        /* ماسک استخوان‌بندی روی ساختار SVG رادار */
         .loading-active .radar-chart-poly, .loading-active .radar-chart-lines {
             display: none !important;
         }
@@ -847,18 +844,15 @@ html, body {
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            // شبیه‌ساز تأخیر لود دیتای سرور محلی (یک ثانیه ثابت فرضی برای همگام‌سازی بصری)
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 
-                // حذف کل ساختارهای اسکلت لودینگ شیمر
                 document.querySelectorAll('.id-loading-target').forEach(el => {
                     el.classList.remove('skeleton-loading');
                     el.style.width = '';
                     el.style.height = '';
                 });
 
-                // رندر و جابه‌جایی چارت رادار و تصاویر لوکال ذخیره شده
                 document.getElementById('radar-skeleton-mask').style.display = 'none';
                 
                 const avatar = document.querySelector('.avatar-img');
@@ -871,7 +865,6 @@ html, body {
                     ph.style.display = 'none';
                 });
 
-                // رندر زنده آیکون‌های وکتور لوکس سیستم
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
@@ -889,7 +882,6 @@ html, body {
 
     const loader = document.getElementById("top-loader");
 
-    // شروع لودینگ
     loader.style.width = "40%";
 
     setTimeout(()=> {
@@ -900,7 +892,6 @@ html, body {
         loader.style.width = "100%";
     }, 500);
 
-    // انتقال صفحه
     setTimeout(()=> {
         window.location.href = url;
     }, 700);

@@ -46,7 +46,6 @@
             font-family: var(--font-sans);
             color: var(--text-main);
             min-height: 100vh;
-            /* افزایش پدینگ پایینی برای جلوگیری از تداخل محتوا با نوار ناوبری جدید */
             padding-bottom: calc(90px + env(safe-area-inset-bottom));
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
@@ -104,7 +103,6 @@
             color: var(--text-muted);
         }
 
-        /* دکمه هوش مصنوعی کنار باکس سرچ */
         .ai-chat-trigger-btn {
             width: 45px;
             height: 45px;
@@ -223,7 +221,6 @@
             z-index: 2;
         }
 
-        /* ردیف دکمه هوش مصنوعی و اطلاعات محصول */
         .product-footer-action-row {
             display: flex;
             align-items: center;
@@ -254,7 +251,6 @@
             text-overflow: ellipsis;
         }
 
-        /* دکمه کوچک هوش مصنوعی روی کارت محصول */
         .product-ai-mini-btn {
             width: 26px;
             height: 26px;
@@ -551,18 +547,15 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            // شبیه‌ساز دریافت داده شبکه برای نمایش فید استخوان‌بندی متحرک
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 
-                // حذف افکت‌های بارگذاری و آزادسازی فضاهای متنی
                 document.querySelectorAll('.id-loading-target').forEach(el => {
                     el.classList.remove('skeleton-loading');
                     el.style.width = '';
                     el.style.height = '';
                 });
 
-                // رندر و آشکارسازی عکس‌ها و محصولات بدون آسیب زدن به لایوت
                 document.querySelectorAll('.product-render-img').forEach(img => img.style.opacity = '1');
                 document.querySelectorAll('.skeleton-img-placeholder').forEach(ph => ph.style.display = 'none');
                 

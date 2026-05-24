@@ -912,18 +912,15 @@ html, body {
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            // شبیه‌ساز مهندسی تأخیر شبکه برای نمایش استخوان‌بندی (یک ثانیه فرضی)
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 
-                // حذف کلاس‌های شیمر و محدودیت‌های لوکال ابعاد متون
                 document.querySelectorAll('.id-loading-target').forEach(el => {
                     el.classList.remove('skeleton-loading');
                     el.style.width = '';
                     el.style.height = '';
                 });
 
-                // پدیدار شدن تصاویر اصلی فیکس شده
                 document.querySelectorAll('.main-product-large-img, .ingredient-texture-thumb').forEach(img => {
                     img.style.display = 'block';
                 });
@@ -931,7 +928,6 @@ html, body {
                     ph.style.display = 'none';
                 });
 
-                // رندر وکتور آیکون‌ها
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
@@ -950,7 +946,6 @@ html, body {
 
     const loader = document.getElementById("top-loader");
 
-    // شروع لودینگ
     loader.style.width = "40%";
 
     setTimeout(()=> {
@@ -961,7 +956,6 @@ html, body {
         loader.style.width = "100%";
     }, 500);
 
-    // انتقال صفحه
     setTimeout(()=> {
         window.location.href = url;
     }, 700);
