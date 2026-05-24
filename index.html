@@ -43,7 +43,6 @@
 
 }
 
-/* مخفی کردن scrollbar اگر چیزی accidental بشه */
 
 ::-webkit-scrollbar {
 
@@ -424,7 +423,7 @@ html, body {
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex;
-            justify-content: space-between; /* توزیع کاملاً متناسب فضا */
+            justify-content: space-between; 
             align-items: center;
             border-top: 1px solid rgba(0,0,0,0.04);
             z-index: 999;
@@ -443,9 +442,9 @@ html, body {
             text-decoration: none;
             font-size: 10px;
             font-weight: 500;
-            flex: 1; /* تخصیص فضای مساوی برای جلوگیری از مچاله شدن آیکون‌ها */
+            flex: 1; 
             min-width: 0;
-            white-space: nowrap; /* جلوگیری از دوخطی شدن عنوان تب‌ها */
+            white-space: nowrap;
         }
 
         .nav-item span {
@@ -462,7 +461,7 @@ html, body {
 
         .nav-item.scan-item {
             position: relative;
-            top: -5px; /* توازن بصری دکمه اسکن میانی */
+            top: -5px;
         }
 
         .scan-icon-wrapper {
@@ -482,7 +481,6 @@ html, body {
             transform: scale(0.92);
         }
 
-        /* 📱 بهینه‌سازی اختصاصی برای آیفون‌های بسیار کوچک (عرض زیر 360 پیکسل مانند iPhone SE) */
         @media (max-width: 360px) {
             .nav-bar {
                 padding-left: 4px;
@@ -490,7 +488,7 @@ html, body {
                 padding-top: 8px;
             }
             .nav-item {
-                font-size: 9px; /* کوچک‌تر شدن ظریف فونت جهت جلوگیری از فشردگی */
+                font-size: 9px;
                 gap: 2px;
             }
             .scan-icon-wrapper {
@@ -1000,7 +998,6 @@ html, body {
 
     const loader = document.getElementById("top-loader");
 
-    // شروع لودینگ
     loader.style.width = "40%";
 
     setTimeout(()=> {
@@ -1011,7 +1008,6 @@ html, body {
         loader.style.width = "100%";
     }, 500);
 
-    // انتقال صفحه
     setTimeout(()=> {
         window.location.href = url;
     }, 700);
