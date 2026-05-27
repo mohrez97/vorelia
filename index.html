@@ -411,26 +411,27 @@ html, body {
             gap: 12px;
         }
 
-        /* ========================================================
-           📱 ULTRA-RESPONSIVE PREMIUM NAVIGATION BAR
+       /* ========================================================
+           📱 ULTRA-RESPONSIVE PREMIUM NAVIGATION BAR (YouTube App Style)
         ======================================================== */
         .nav-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+           background-color: rgba(255, 255, 255, 0.82); 
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             display: flex;
             justify-content: space-between; 
             align-items: center;
-            border-top: 1px solid rgba(0,0,0,0.04);
+            border-top: 1px solid rgba(0, 0, 0, 0.06); 
             z-index: 999;
-            padding-top: 10px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            padding-left: 8px;
-            padding-right: 8px;
+            padding-top: 8px;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom)); 
+            padding-left: 4px;
+            padding-right: 4px;
+            width: 100%;
         }
 
         .nav-item {
@@ -441,10 +442,15 @@ html, body {
             color: var(--text-muted);
             text-decoration: none;
             font-size: 10px;
-            font-weight: 500;
+            font-weight: 400;
             flex: 1; 
             min-width: 0;
             white-space: nowrap;
+            transition: color 0.15s ease;
+        }
+
+        .nav-item i {
+            transition: transform 0.15s ease;
         }
 
         .nav-item span {
@@ -452,48 +458,55 @@ html, body {
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 100%;
+            font-size: 10px;
+            letter-spacing: -0.2px;
         }
 
         .nav-item.active {
             color: var(--text-main);
+        }
+
+        .nav-item.active span {
             font-weight: 600;
         }
 
         .nav-item.scan-item {
             position: relative;
-            top: -5px;
+            top: 0;
         }
 
         .scan-icon-wrapper {
-            width: 40px;
-            height: 40px;
-            background-color: var(--accent-purple);
+            width: 38px;
+            height: 38px;
+            background-color: var(--accent-purple); 
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--accent-purple-dark);
-            margin-bottom: 2px;
-            transition: transform 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
+        .nav-item:active {
+            opacity: 0.7;
+        }
+        
         .nav-item.scan-item:active .scan-icon-wrapper {
             transform: scale(0.92);
+            background-color: rgba(142, 117, 159, 0.2);
         }
 
         @media (max-width: 360px) {
             .nav-bar {
-                padding-left: 4px;
-                padding-right: 4px;
-                padding-top: 8px;
+                padding-top: 6px;
             }
             .nav-item {
                 font-size: 9px;
-                gap: 2px;
+                gap: 3px;
             }
             .scan-icon-wrapper {
-                width: 36px;
-                height: 36px;
+                width: 34px;
+                height: 34px;
             }
         }
 
@@ -736,6 +749,111 @@ html, body {
     z-index:99999;
     transition: width .3s ease;
 }
+/* 📱 INSTAGRAM REELS VIDEO ROW */
+        .reels-scroll-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            margin-bottom: 26px;
+            padding: 4px 2px;
+        }
+        .reels-scroll-row::-webkit-scrollbar { display: none; }
+
+        .reel-card {
+            width: 140px;
+            aspect-ratio: 9 / 16; /* نسبت تصویر دقیق ریلز اینستاگرام */
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background-color: var(--skeleton-base);
+        }
+
+        .reel-cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .reel-card:active .reel-cover-img {
+            transform: scale(0.96);
+        }
+
+        /* لایه تاریک کننده پایین ویدیو برای خوانایی متن‌ها */
+        .reel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12px;
+            color: #FFFFFF;
+        }
+
+        .reel-top-badge {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 4px 8px;
+            border-radius: 100px;
+            font-size: 9px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .reel-bottom-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .reel-caption {
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .reel-views {
+            font-size: 9px;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+         .section-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            margin-bottom: 14px;
+        }
+
+        .section-main-title {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .section-see-all {
+            font-size: 12px;
+            color: var(--accent-purple-dark);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
     </style>
 </head>
 <body class="loading-active">
@@ -831,6 +949,7 @@ html, body {
                         <div class="skeleton-img-placeholder id-loading-target skeleton-loading"></div>
                         <img class="product-img hide-on-loading" src="s2.png" alt="Product" style="display:none;">
                     </div>
+                    
                     <div class="product-brand id-loading-target skeleton-loading" style="width: 70px;">The Ordinary</div>
                     <div class="product-name id-loading-target skeleton-loading" style="width: 100px; height: 14px; margin-top: 4px;">Niacinamide 10%</div>
                     <div class="product-meta">
@@ -885,6 +1004,58 @@ html, body {
             </div>
         </div>
 
+        <!-- 🎬 INSTAGRAM-STYLE REELS ROW -->
+        <div class="section-title-row">
+            <span class="section-main-title">Trending Reels</span>
+            <a href="#" class="section-see-all">View All</a>
+        </div>
+        
+        <div class="reels-scroll-row">
+            <!-- Reel 1 -->
+            <div class="reel-card" onclick="alert('Playing Reel: Glass Skin Secret...')">
+                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
+                <div class="reel-overlay">
+                    <div class="reel-top-badge">
+                        <i data-lucide="play" fill="currentColor" style="width: 8px; height: 8px;"></i>
+                        <span>Live Test</span>
+                    </div>
+                    <div class="reel-bottom-info">
+                        <p class="reel-caption">How to get the perfect Glass Skin in 3 steps ✨</p>
+                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 45K views</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reel 2 -->
+            <div class="reel-card" onclick="alert('Playing Reel: Niacinamide Mistakes...')">
+                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1556229010-aa3f7ff66b24?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
+                <div class="reel-overlay">
+                    <div class="reel-top-badge" style="background: rgba(244, 67, 54, 0.3);">
+                        <i data-lucide="alert-circle" style="width: 8px; height: 8px;"></i>
+                        <span>Warning</span>
+                    </div>
+                    <div class="reel-bottom-info">
+                        <p class="reel-caption">Stop mixing Vitamin C and Retinol incorrectly! ❌</p>
+                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 128K views</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reel 3 -->
+            <div class="reel-card" onclick="alert('Playing Reel: ASMR Morning Routine...')">
+                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
+                <div class="reel-overlay">
+                    <div class="reel-top-badge">
+                        <i data-lucide="music" style="width: 8px; height: 8px;"></i>
+                        <span>ASMR</span>
+                    </div>
+                    <div class="reel-bottom-info">
+                        <p class="reel-caption">Satisfying Morning Routine with CeraVe & Isdin 🧴</p>
+                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 82K views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="ai-chat-card" onclick="startPageTransition('chat.html')">
             <div class="action-left">
                 <div class="icon-box" style="background-color: rgba(142, 117, 159, 0.08);">
@@ -899,14 +1070,15 @@ html, body {
         </div>
     </div>
 
-   <div class="share-text" onclick="window.location.href='mailto:rezamilani81@gmail.com'">
+  <div class="share-text" onclick="window.location.href='mailto:rezamilani81@gmail.com'">
 
     <div class="share-sub">
-        This is a demo version
+        This is a functional prototype • Vorelia is in Pre-Seed stage
     </div>
 
-    <div class="share-action">
-        Tap to contact founders →
+   <div class="share-action" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%;">
+        <i data-lucide="mail" style="width: 16px; height: 16px; stroke-width: 2;"></i>
+        <span>Contact founders</span>
     </div>
 
 </div>

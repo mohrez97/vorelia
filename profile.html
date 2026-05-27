@@ -131,6 +131,7 @@ html, body {
             border-radius: 50%;
             object-fit: cover;
             transition: opacity 0.3s ease;
+            border:1px solid var(--accent-purple-dark);
         }
 
         .user-meta h2 {
@@ -495,22 +496,24 @@ html, body {
             color: #C5C5C5;
         }
 
-        /* Bottom Navbar */
-        .nav-bar {
+         .nav-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+           background-color: rgba(255, 255, 255, 0.82); 
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between; 
             align-items: center;
-            border-top: 1px solid rgba(0,0,0,0.02);
+            border-top: 1px solid rgba(0, 0, 0, 0.06); 
             z-index: 999;
-            padding-top: 10px;
-            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            padding-top: 8px;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom)); 
+            padding-left: 4px;
+            padding-right: 4px;
+            width: 100%;
         }
 
         .nav-item {
@@ -520,44 +523,73 @@ html, body {
             gap: 4px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 9px;
-            font-weight: 500;
-            width: 55px;
+            font-size: 10px;
+            font-weight: 400;
+            flex: 1; 
+            min-width: 0;
+            white-space: nowrap;
+            transition: color 0.15s ease;
+        }
+
+        .nav-item i {
+            transition: transform 0.15s ease;
+        }
+
+        .nav-item span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            font-size: 10px;
+            letter-spacing: -0.2px;
         }
 
         .nav-item.active {
             color: var(--text-main);
         }
 
+        .nav-item.active span {
+            font-weight: 600;
+        }
+
         .nav-item.scan-item {
             position: relative;
-            top: -2px;
+            top: 0;
         }
-  @media (max-width: 360px) {
-            .nav-bar {
-                padding-left: 4px;
-                padding-right: 4px;
-                padding-top: 8px;
-            }
-            .nav-item {
-                font-size: 9px;
-                gap: 2px;
-            }
-            .scan-icon-wrapper {
-                width: 36px;
-                height: 36px;
-            }
-        }
+
         .scan-icon-wrapper {
-            width: 40px;
-            height: 40px;
-            background-color: var(--accent-purple);
+            width: 38px;
+            height: 38px;
+            background-color: var(--accent-purple); 
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--accent-purple-dark);
-            margin-bottom: 2px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .nav-item:active {
+            opacity: 0.7;
+        }
+        
+        .nav-item.scan-item:active .scan-icon-wrapper {
+            transform: scale(0.92);
+            background-color: rgba(142, 117, 159, 0.2);
+        }
+
+        @media (max-width: 360px) {
+            .nav-bar {
+                padding-top: 6px;
+            }
+            .nav-item {
+                font-size: 9px;
+                gap: 3px;
+            }
+            .scan-icon-wrapper {
+                width: 34px;
+                height: 34px;
+            }
         }
 
         /* ========================================================
@@ -614,7 +646,7 @@ html, body {
         <section class="profile-hero">
             <div class="profile-left">
                 <div class="avatar-container id-loading-target skeleton-loading circle-skeleton-mask">
-                    <img class="avatar-img hide-on-loading" src="https://www.amway.com/medias/LP-24ANAHMBRN-Category-Beauty-m-new.jpg?context=bWFzdGVyfGltYWdlc3wyNTYwOTd8aW1hZ2UvanBlZ3xzeXMtbWFzdGVyL2ltYWdlcy9oYTkvaDk5Lzk5NjIzNTI4Njk0MDYvTFBfMjRBTkFITUJSTl9DYXRlZ29yeV9CZWF1dHlfbV9uZXcuanBnfDY4MmFkM2IxMTMzNWRmZmJkMjkxODU2YjA1Zjg3NGFkMmU5OGQ4Y2Q1OGVhM2E1MmMxNTRmYTg4YWEwMmU5ZGY" alt="Elaheh" style="opacity: 0;">
+                    <img class="avatar-img hide-on-loading" src="s1.png" alt="Elaheh" style="opacity: 0;">
                 </div>
                 <div class="user-meta">
                     <h2 class="id-loading-target skeleton-loading" style="width: 110px; height: 24px;">Elaheh <i data-lucide="edit-3" class="edit-icon" style="color:#A0A0A0;width: 16px;"></i></h2>
