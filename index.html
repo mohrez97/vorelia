@@ -2090,6 +2090,10 @@ html, body {
     transform: translateX(4px);
     color: #1f1f1f;
 }
+.progress-fill {
+    /* استایلهای قبلی خودت دست‌نخورده بمونن، فقط این خط رو اضافه کن */
+    transition: width 2s cubic-bezier(0.1, 0.75, 0.55, 0.95);
+}
 </style>
 </head>
 <body class="loading-active">
@@ -2117,13 +2121,12 @@ html, body {
             <div class="hero-text-wrapper">
                 <div class="greeting id-loading-target skeleton-loading" style="width: 140px;">Good morning, Elaheh <span style="color:#D4AF37;">✦</span></div>
                 <h1 class="hero-title id-loading-target skeleton-loading" style="width: 100%; height: 32px; margin-bottom: 8px;">Let’s find what your skin truly needs.</h1>
-                <p class="hero-subtitle id-loading-target skeleton-loading" style="width: 180px;">AI-powered skincare recommendations just for you.</p>
+                <p class="hero-subtitle id-loading-target skeleton-loading" style="width: 180px;">Advanced biometric skin analysis and deep learning diagnosis powered by Vorelia AI.</p>
             </div>
             <img class="hero-image hide-on-loading" src="s1.png" alt="Model Skin" id="hero-avatar">
         </section>
 
      <div class="gemini-scan-animated-card" onclick="startPageTransition('scan.html')">
-    <!-- لایه داخلی برای حفظ پس‌زمینه سفید و ساختار کارت -->
     <div class="gemini-scan-card-inner">
         <div class="gemini-scan-content-left">
             <div class="gemini-scan-icon-container">
@@ -2138,104 +2141,53 @@ html, body {
     </div>
 </div>
 <br>
-         <!-- 🎬 INSTAGRAM-STYLE REELS ROW -->
-        <div class="section-title-row">
-            <span class="section-main-title">Trending Reels</span>
-            <a href="#" class="section-see-all">View All</a>
-        </div>
-        
-        <div class="reels-scroll-row">
-            <!-- Reel 1 -->
-            <div class="reel-card" onclick="openVReelEngine()">
-                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
-                <div class="reel-overlay">
-                    <div class="reel-top-badge">
-                        <i data-lucide="play" fill="currentColor" style="width: 8px; height: 8px;"></i>
-                        <span>Live Test</span>
-                    </div>
-                    <div class="reel-bottom-info">
-                        <p class="reel-caption">How to get the perfect Glass Skin in 3 steps ✨</p>
-                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 45K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reel 2 -->
-            <div class="reel-card" onclick="openVReelEngine()">
-                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1556229010-aa3f7ff66b24?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
-                <div class="reel-overlay">
-                    <div class="reel-top-badge" style="background: rgba(244, 67, 54, 0.3);">
-                        <i data-lucide="alert-circle" style="width: 8px; height: 8px;"></i>
-                        <span>Warning</span>
-                    </div>
-                    <div class="reel-bottom-info">
-                        <p class="reel-caption">Stop mixing Vitamin C and Retinol incorrectly! ❌</p>
-                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 128K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reel 3 -->
-            <div class="reel-card" onclick="alert('Playing Reel: ASMR Morning Routine...')">
-                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
-                <div class="reel-overlay">
-                    <div class="reel-top-badge">
-                        <i data-lucide="music" style="width: 8px; height: 8px;"></i>
-                        <span>ASMR</span>
-                    </div>
-                    <div class="reel-bottom-info">
-                        <p class="reel-caption">Satisfying Morning Routine with CeraVe & Isdin 🧴</p>
-                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 82K views</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
 
         <div class="section-header">
             <h2 class="section-title">Your skin at a glance</h2>
             <a href="#" class="section-link">View full report</a>
         </div>
 
-        <div class="metrics-scroll-wrapper">
-            <div class="metrics-row">
-                <div class="metric-card">
-                    <i data-lucide="droplet" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
-                    <span class="metric-label id-loading-target skeleton-loading">Hydration</span>
-                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">72</span>
-                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
-                    <div class="progress-bar-container">
-                        <div class="progress-fill hide-on-loading" style="width: 72%;"></div>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <i data-lucide="sparkle" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
-                    <span class="metric-label id-loading-target skeleton-loading">Brightness</span>
-                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">68</span>
-                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
-                    <div class="progress-bar-container">
-                        <div class="progress-fill hide-on-loading" style="width: 68%;"></div>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <i data-lucide="waves" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
-                    <span class="metric-label id-loading-target skeleton-loading">Texture</span>
-                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">65</span>
-                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Fair</span>
-                    <div class="progress-bar-container">
-                        <div class="progress-fill hide-on-loading" style="width: 65%;"></div>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <i data-lucide="shield" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
-                    <span class="metric-label id-loading-target skeleton-loading">Barrier</span>
-                    <span class="metric-value id-loading-target skeleton-loading" style="width: 35px; height: 20px; margin-top:4px;">80</span>
-                    <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Strong</span>
-                    <div class="progress-bar-container">
-                        <div class="progress-fill hide-on-loading" style="width: 80%;"></div>
-                    </div>
-                </div>
+      <div class="metrics-scroll-wrapper">
+    <div class="metrics-row">
+        <div class="metric-card">
+            <i data-lucide="droplet" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+            <span class="metric-label id-loading-target skeleton-loading">Hydration</span>
+            <span class="metric-value id-loading-target skeleton-loading" data-target="72" style="width: 35px; height: 20px; margin-top:4px;">0</span>
+            <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
+            <div class="progress-bar-container">
+                <div class="progress-fill hide-on-loading" data-width="72%" style="width: 0%;"></div>
             </div>
         </div>
+        <div class="metric-card">
+            <i data-lucide="sparkle" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+            <span class="metric-label id-loading-target skeleton-loading">Brightness</span>
+            <span class="metric-value id-loading-target skeleton-loading" data-target="68" style="width: 35px; height: 20px; margin-top:4px;">0</span>
+            <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
+            <div class="progress-bar-container">
+                <div class="progress-fill hide-on-loading" data-width="68%" style="width: 0%;"></div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <i data-lucide="waves" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+            <span class="metric-label id-loading-target skeleton-loading">Texture</span>
+            <span class="metric-value id-loading-target skeleton-loading" data-target="65" style="width: 35px; height: 20px; margin-top:4px;">0</span>
+            <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Fair</span>
+            <div class="progress-bar-container">
+                <div class="progress-fill hide-on-loading" data-width="65%" style="width: 0%;"></div>
+            </div>
+        </div>
+        <div class="metric-card">
+            <i data-lucide="shield" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
+            <span class="metric-label id-loading-target skeleton-loading">Barrier</span>
+            <span class="metric-value id-loading-target skeleton-loading" data-target="80" style="width: 35px; height: 20px; margin-top:4px;">0</span>
+            <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Strong</span>
+            <div class="progress-bar-container">
+                <div class="progress-fill hide-on-loading" data-width="80%" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
         <div class="section-header">
             <h2 class="section-title">Top matches for you</h2>
@@ -2305,7 +2257,58 @@ html, body {
 
             </div>
         </div>
+   <!-- 🎬 INSTAGRAM-STYLE REELS ROW -->
+        <div class="section-title-row">
+            <span class="section-main-title">Trending Reels</span>
+            <a href="#" class="section-see-all">View All</a>
+        </div>
+        
+        <div class="reels-scroll-row">
+            <!-- Reel 1 -->
+            <div class="reel-card" onclick="openVReelEngine()">
+                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
+                <div class="reel-overlay">
+                    <div class="reel-top-badge">
+                        <i data-lucide="play" fill="currentColor" style="width: 8px; height: 8px;"></i>
+                        <span>Live Test</span>
+                    </div>
+                    <div class="reel-bottom-info">
+                        <p class="reel-caption">How to get the perfect Glass Skin in 3 steps ✨</p>
+                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 45K views</span>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Reel 2 -->
+            <div class="reel-card" onclick="openVReelEngine()">
+                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1556229010-aa3f7ff66b24?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
+                <div class="reel-overlay">
+                    <div class="reel-top-badge" style="background: rgba(244, 67, 54, 0.3);">
+                        <i data-lucide="alert-circle" style="width: 8px; height: 8px;"></i>
+                        <span>Warning</span>
+                    </div>
+                    <div class="reel-bottom-info">
+                        <p class="reel-caption">Stop mixing Vitamin C and Retinol incorrectly! ❌</p>
+                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 128K views</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reel 3 -->
+            <div class="reel-card" onclick="alert('Playing Reel: ASMR Morning Routine...')">
+                <img class="reel-cover-img" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
+                <div class="reel-overlay">
+                    <div class="reel-top-badge">
+                        <i data-lucide="music" style="width: 8px; height: 8px;"></i>
+                        <span>ASMR</span>
+                    </div>
+                    <div class="reel-bottom-info">
+                        <p class="reel-caption">Satisfying Morning Routine with CeraVe & Isdin 🧴</p>
+                        <span class="reel-views"><i data-lucide="eye" style="width: 10px;"></i> 82K views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
        
       <div class="gemini-style-chat-card" onclick="startPageTransition('chat.html')">
     <div class="gemini-card-content-left">
@@ -2555,6 +2558,7 @@ html, body {
     </div>
 </div>
     <script>
+        
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
@@ -2579,6 +2583,34 @@ const toast = document.getElementById('prototype-toast');
     setTimeout(() => {
         toast.classList.remove('show');
     }, 4500);
+
+
+    // ۱. انیمیشن پروگرس بارها (پر شدن همزمان و نرم زیر اعداد)
+document.querySelectorAll('.progress-fill').forEach(fill => {
+    const targetWidth = fill.getAttribute('data-width');
+    setTimeout(() => {
+        fill.style.width = targetWidth;
+    }, 150); // تاخیر ریز برای فعال شدن ترانزیشن CSS
+});
+
+// ۲. انیمیشن افزایش ملایم و چشم‌نواز اعداد
+document.querySelectorAll('.metric-value').forEach(node => {
+    const targetNumber = parseInt(node.getAttribute('data-target'), 10);
+    let currentNumber = 0;
+    
+    // زمان کل انیمیشن ۲ ثانیه (۲۰۰ ball/ms هماهنگ با سی‌اس‌اس)
+    const totalDuration = 2000; 
+    const stepInterval = Math.floor(totalDuration / targetNumber);
+
+    const counter = setInterval(() => {
+        currentNumber++;
+        node.innerText = currentNumber;
+
+        if (currentNumber >= targetNumber) {
+            clearInterval(counter);
+        }
+    }, stepInterval);
+});
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
