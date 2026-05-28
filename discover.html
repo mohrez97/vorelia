@@ -79,45 +79,103 @@
             gap: 10px;
         }
 
-        .search-bar-wrapper {
-            display: flex;
-            align-items: center;
-            background-color: var(--card-bg);
-            border-radius: 100px;
-            padding: 12px 16px;
-            gap: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
-            flex: 1;
-        }
+     /* رپر اصلی */
+.search-container-ios {
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    width: 100%;
+    max-width: 600px;
+}
 
-        .search-input {
-            border: none;
-            background: none;
-            outline: none;
-            width: 100%;
-            font-family: var(--font-sans);
-            font-size: 14px;
-            color: var(--text-main);
-        }
+/* سرچ بار شیشه‌ای روشن (Light Glassmorphism) */
+.search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* استفاده از پس‌زمینه سفیدِ نیمه‌شفاف برای لایت مود */
+    background: rgba(0, 0, 0, 0.05); 
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* بوردر تیره ملایم برای مشخص شدن مرز اینپوت */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 10px 16px;
+    border-radius: 99px;
+    flex: 1;
+    transition: all 0.2s ease;
+}
 
-        .ai-chat-trigger-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-color: var(--text-main);
-            color: #FFFFFF;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease;
-        }
+/* فوکوس روی سرچ‌بار (وقتی کاربر روش کلیک میکنه) */
+.search-bar-wrapper:focus-within {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.15);
+}
 
-        .ai-chat-trigger-btn:active { transform: scale(0.95); }
+/* استایل اینپوت در لایت مود */
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: #1c1c1e; /* رنگ متن دارکِ اپلی */
+}
 
+/* رنگ متن راهنما (Placeholder) */
+.search-input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* آیکون میکروفون و سرچ */
+.mic-icon {
+    transition: transform 0.2s ease, opacity 0.2s;
+}
+.mic-icon:hover {
+    transform: scale(1.1);
+    opacity: 0.7;
+}
+
+/* دکمه کشیده هوش مصنوعی (طراحی پرمیوم لایت مود iOS) */
+.ai-chat-trigger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    
+    height: 42px;
+    padding: 0 20px;
+    border-radius: 99px;
+    
+    /* پس‌زمینه تیره و عمیق برای دکمه AI تا در لایت مود به شدت جذاب و متمایز باشه */
+    background: linear-gradient(135deg, #121217, #221830);
+    
+    /* متن و آیکون */
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    
+    /* نئون ملایم بنفش که روی پس‌زمینه روشن هم خودش رو نشون میده */
+    border: 1px solid rgba(147, 51, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+    
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* افکت هاور دکمه هوش مصنوعی */
+.ai-chat-trigger-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(147, 51, 234, 0.3);
+    background: linear-gradient(135deg, #1a1a24, #2d2040);
+}
+
+/* افکت کلیک دکمه */
+.ai-chat-trigger-btn:active {
+    transform: scale(0.96);
+}
         /* Section Global Typography */
         .section-title-row {
             display: flex;
@@ -844,13 +902,20 @@
         <header class="discover-header">
             <h1 class="id-loading-target skeleton-loading" style="width: 140px; height: 38px;">Discover</h1>
             <div class="search-action-row">
-                <div class="search-bar-wrapper">
-                    <i data-lucide="search" size="16" style="color: var(--text-muted)"></i>
-                    <input type="text" class="search-input" placeholder="Search brands, ingredients, creators...">
-                </div>
-                <button class="ai-chat-trigger-btn hide-on-loading" onclick="alert('Opening Vorelia AI Skin Assistant...')">
-                    <i data-lucide="sparkles" size="18"></i>
-                </button>
+           <div class="search-container-ios">
+    <!-- بخش سرچ بار شیشه‌ای -->
+    <div class="search-bar-wrapper">
+        <i data-lucide="search" size="16" style="color: var(--text-muted)"></i>
+        <input type="text" class="search-input" placeholder="Search brands, ingredients, creators...">
+        <i data-lucide="mic" size="16" class="mic-icon" style="color: var(--text-muted); cursor: pointer;"></i>
+    </div>
+    
+    <!-- دکمه AI کشیده و مدرن به سبک iOS جدید -->
+    <button class="ai-chat-trigger-btn hide-on-loading" onclick="alert('Opening Vorelia AI Skin Assistant...')">
+        <i data-lucide="sparkles" size="16"></i>
+        <span>AI</span>
+    </button>
+</div>
             </div>
         </header>
 

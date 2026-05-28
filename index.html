@@ -1831,10 +1831,10 @@ html, body {
     max-width: 400px;
     padding: 16px 20px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(221, 221, 221, 0.25);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     
     color: #000;
@@ -2348,7 +2348,6 @@ const toast = document.getElementById('prototype-toast');
         toast.classList.add('show');
     }, 500);
 
-    // ۲. پنهان شدن خودکار
     setTimeout(() => {
         toast.classList.remove('show');
     }, 4500);
