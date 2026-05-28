@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="fa" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Vorelia - Skin Progress & Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="VORELIA.png">
+    <link rel="apple-touch-icon" href="VORELIA.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FAF6F0">
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #7E7E7E;
+            --accent-purple: #8E759F;
+            --accent-purple-light: #F3EDF7;
+            --border-color: #F5F0E9;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --card-radius: 20px;
+            
+            /* Metric Colors based on image */
+            --metric-green: #3B7A57;
+            --metric-light-green: #EAF2EC;
+            --brand-gradient: linear-gradient(135deg, #8E759F 0%, #B8A6C5 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: calc(30px + env(safe-area-inset-bottom));
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: calc(20px + env(safe-area-inset-top)) 20px 0 20px;
+        }
+
+        /* Top Action Bar */
+        .progress-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .circle-btn {
+            width: 40px;
+            height: 40px;
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease;
+        }
+        .circle-btn:active { transform: scale(0.95); }
+
+        /* Main Screen Title */
+        .progress-title-area {
+            text-align: center;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+        }
+
+        .progress-title-area h1 {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .progress-title-area p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        
+        /* ========================================================
+           📈 CARD 1: YOUR SKIN JOURNEY & TIMELINE
+        ======================================================== */
+        .journey-card {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.02);
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header-row h2 { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        
+        .dropdown-filter {
+            background: #F6F1EB;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #4A3E56;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Timeline Navigation Track */
+        .timeline-track-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+
+        .timeline-line-bg {
+            position: absolute;
+            top: 10px;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: #EFEBE4;
+            z-index: 1;
+        }
+
+        .timeline-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .node-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #D1C9BC;
+            border: 2px solid var(--card-bg);
+            box-content: content-box;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .timeline-node.active .node-dot {
+            background: var(--accent-purple);
+            transform: scale(1.4);
+            box-shadow: 0 0 0 4px var(--accent-purple-light);
+        }
+
+        .node-date { font-size: 10px; font-weight: 500; color: var(--text-muted); }
+        .timeline-node.active .node-date { color: var(--text-main); font-weight: 600; }
+
+        /* Compare Grid (Before / Ring / After) */
+        .compare-visual-grid {
+            display: grid;
+            grid-template-columns: 1fr 110px 1fr;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .compare-img-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .compare-img-box span {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5C4E68;
+            background: #F3EDF7;
+            padding: 4px 0;
+            border-radius: 6px;
+        }
+        .compare-img-box:last-child span {
+            background: #EAE6FE;
+            color: #4F359B;
+        }
+
+        .compare-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+
+        /* Central Circular Progress Improvement Ring */
+        .improvement-ring-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .ring-svg-container {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            margin-bottom: 8px;
+        }
+
+        .ring-svg-container svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .ring-circle-bg { fill: none; stroke: #F3EDF7; stroke-width: 6; }
+        
+        .ring-circle-fill {
+            fill: none;
+            stroke: var(--accent-purple);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 220;
+            stroke-dashoffset: 220;
+            animation: fillRing 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+        }
+
+        @keyframes fillRing {
+            to { stroke-dashoffset: 40; } /* Matches roughly 18% or desired custom look */
+        }
+
+        .ring-inner-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ring-inner-text h3 { font-size: 18px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; }
+        .ring-inner-text h3 span { font-size: 12px; margin-left: 1px; }
+
+        .improvement-ring-center p { font-size: 10px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+        .improvement-ring-center span { font-size: 9px; color: var(--text-muted); }
+
+
+        /* ========================================================
+           📊 CARD 2: SCORE CHANGES DETAILED MATRIX
+        ======================================================== */
+        .score-changes-card {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.02);
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+
+        .legend-indicator-row {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 4px; }
+        .legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+        /* Metric Diagnostic Bars List Rows */
+        .metric-comparison-list-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 12px;
+        }
+
+        .metric-row-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .metric-label-node {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .metric-meta-left { display: flex; gap: 10px; align-items: center; }
+        
+        .metric-icon-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple);
+        }
+
+        .metric-text-details h4 { font-size: 12.5px; font-weight: 600; color: var(--text-main); }
+        .metric-text-details p { font-size: 10.5px; color: var(--text-muted); }
+
+        .metric-data-values-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .val-past { color: var(--text-muted); width: 28px; text-align: right; }
+        .val-current { font-weight: 700; color: var(--metric-green); width: 32px; text-align: right; }
+        
+        .val-growth-badge {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--metric-green);
+            background: var(--metric-light-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1px;
+        }
+        .val-growth-badge.negative {
+            color: #C94A4A;
+            background: #FCEAEA;
+        }
+
+        /* Dual Overlapping Custom Progress Slider Bar */
+        .bar-track-slider-visual {
+            width: 100%;
+            height: 6px;
+            background: #EFEBE4;
+            border-radius: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill-past {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #D1C9BC;
+            border-radius: 100px;
+            width: 0;
+            transition: width 1s ease-in-out;
+        }
+
+        .bar-fill-current {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #8E759F 0%, var(--metric-green) 100%);
+            border-radius: 100px;
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+
+        /* ========================================================
+           ✨ CARD 3: INSIGHTS & ROUTINE CHECKS
+        ======================================================== */
+        .insights-banner-gradient-card {
+            background: linear-gradient(180deg, #FDFBFA 0%, #F5EDFA 100%);
+            border: 1px solid rgba(142, 117, 159, 0.08);
+            border-radius: var(--card-radius);
+            padding: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            position: relative;
+            box-shadow: 0 6px 20px rgba(142,117,159,0.03);
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+        }
+
+        .star-3d-visual-wrapper {
+            flex-shrink: 0;
+            position: relative;
+            width: 64px;
+            height: 64px;
+            background: radial-gradient(circle, rgba(234,222,247,1) 0%, rgba(255,255,255,0) 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .star-floating-icon {
+            color: #A38CB3;
+            filter: drop-shadow(0 4px 10px rgba(142,117,159,0.3));
+            animation: floatY 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatY {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-6px) rotate(5deg); }
+        }
+
+        .insights-body-content { flex: 1; padding-right: 12px; }
+        .insights-body-content h3 { font-size: 13.5px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+        .insights-body-content p { font-size: 11px; color: var(--text-muted); line-height: 1.45; margin-bottom: 10px; }
+        
+        .tip-sub-pill-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: rgba(255,255,255,0.6);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 10.5px;
+            color: #4A3E56;
+            line-height: 1.35;
+        }
+
+        .circle-arrow-next-btn {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+        }
+
+
+        /* ========================================================
+           🕒 CARD 4: SKINCARE SCAN HISTORY & RECENT ITEMS
+        ======================================================== */
+        .history-section-wrapper {
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+        }
+        
+        .section-headline-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+        .section-headline-bar h3 { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        .section-headline-bar a { font-size: 12px; font-weight: 500; color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 2px; }
+
+        .history-product-card-item {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.01);
+        }
+
+        .history-left-product-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .product-thumbnail-frame {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #FAF6F0;
+            object-fit: contain;
+            padding: 4px;
+        }
+
+        .product-meta-text h4 { font-size: 12.5px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+        .product-meta-text p { font-size: 10.5px; color: var(--text-muted); }
+
+        .history-right-date-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .today-pinnable-badge {
+            background: #EAF2EC;
+            color: var(--metric-green);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 100px;
+        }
+
+        .history-timestamp-lbl { font-size: 10px; color: var(--text-muted); }
+
+
+        /* ========================================================
+           ⚙️ GLOBAL ANIMATION INFRASTRUCTURE
+        ======================================================== */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(24px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-16px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- TOP APP BAR HERO -->
+        <header class="progress-header-bar">
+            <button class="circle-btn"  onclick="window.history.back()"><i data-lucide="chevron-left" size="18"></i></button>
+            <button class="circle-btn"><i data-lucide="help-circle" size="18"></i></button>
+        </header>
+
+        <!-- TITLE HEADLINE -->
+        <div class="progress-title-area">
+            <h1>Progress</h1>
+            <p>Track your skin changes over time and see real results.</p>
+        </div>
+
+
+        <!-- ========================================================
+           📈 CARD 1: YOUR SKIN JOURNEY CONTROLLER
+        ======================================================== -->
+        <section class="journey-card">
+            <div class="card-header-row">
+                <h2>Your Skin Journey</h2>
+                <button class="dropdown-filter">
+                    Last 8 weeks <i data-lucide="chevron-down" size="12"></i>
+                </button>
+            </div>
+
+            <!-- TIMELINE HORIZONTAL NAV TRACK -->
+            <div class="timeline-track-container">
+                <div class="timeline-line-bg"></div>
+                <button class="circle-btn" style="width:24px; height:24px; box-shadow:none; background:#FAF6F0;"><i data-lucide="chevron-left" size="12"></i></button>
+                
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <span class="node-date">Mar 10</span>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <span class="node-date">Mar 24</span>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <span class="node-date">Apr 07</span>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <span class="node-date">Apr 21</span>
+                </div>
+                <div class="timeline-node active">
+                    <div class="node-dot"></div>
+                    <span class="node-date">May 05</span>
+                </div>
+                <div class="timeline-node">
+                    <div class="node-dot"></div>
+                    <span class="node-date">Today</span>
+                </div>
+
+                <button class="circle-btn" style="width:24px; height:24px; box-shadow:none; background:#FAF6F0;"><i data-lucide="chevron-right" size="12"></i></button>
+            </div>
+
+            <!-- VISUAL FACE COMPARE FIELD -->
+            <div class="compare-visual-grid">
+                <!-- Past Frame -->
+                <div class="compare-img-box">
+                    <span>May 05</span>
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="compare-photo" alt="Skin May 05">
+                </div>
+
+                <!-- Central Progress Analytics Circle Ring -->
+                <div class="improvement-ring-center">
+                    <span>Overall Improvement</span>
+                    <div class="ring-svg-container">
+                        <svg viewBox="0 0 80 80">
+                            <circle class="ring-circle-bg" cx="40" cy="40" r="35"/>
+                            <circle class="ring-circle-fill" cx="40" cy="40" r="35"/>
+                        </svg>
+                        <div class="ring-inner-text">
+                            <h3>+18<span>%</span> <i data-lucide="arrow-up" size="12" style="color:var(--accent-purple); stroke-width:3; margin-left:1px;"></i></h3>
+                        </div>
+                    </div>
+                    <p>Great progress!<br>Keep it up.</p>
+                </div>
+
+                <!-- Current Frame -->
+                <div class="compare-img-box">
+                    <span>Today</span>
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="compare-photo" alt="Skin Today">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================================
+           📊 CARD 2: DETAILED DIAGNOSTIC SCORE CHANGES MATRIX
+        ======================================================== -->
+        <section class="score-changes-card">
+            <div class="card-header-row" style="margin-bottom: 14px;">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <h2>Score Changes</h2>
+                    <i data-lucide="info" size="13" style="color:var(--text-muted);"></i>
+                </div>
+                <div class="legend-indicator-row">
+                    <div class="legend-item"><span class="legend-dot" style="background:#D1C9BC;"></span> May 05</div>
+                    <div class="legend-item"><span class="legend-dot" style="background:var(--metric-green);"></span> Today</div>
+                </div>
+            </div>
+
+            <div class="metric-comparison-list-wrapper">
+                <!-- Metric 1: Skin Compatibility -->
+                <div class="metric-row-item">
+                    <div class="metric-label-node">
+                        <div class="metric-meta-left">
+                            <div class="metric-icon-badge"><i data-lucide="shield-check" size="15"></i></div>
+                            <div class="metric-text-details">
+                                <h4>Skin Compatibility</h4>
+                                <p>How well products suit your skin</p>
+                            </div>
+                        </div>
+                        <div class="metric-data-values-right">
+                            <span class="val-past">80%</span>
+                            <span class="val-current">92%</span>
+                            <span class="val-growth-badge"><i data-lucide="arrow-up" size="10"></i>12%</span>
+                        </div>
+                    </div>
+                    <div class="bar-track-slider-visual">
+                        <div class="bar-fill-past" data-width="80%"></div>
+                        <div class="bar-fill-current" data-width="92%"></div>
+                    </div>
+                </div>
+
+                <!-- Metric 2: Hydration -->
+                <div class="metric-row-item">
+                    <div class="metric-label-node">
+                        <div class="metric-meta-left">
+                            <div class="metric-icon-badge"><i data-lucide="droplet" size="15"></i></div>
+                            <div class="metric-text-details">
+                                <h4>Hydration</h4>
+                                <p>Skin moisture level</p>
+                            </div>
+                        </div>
+                        <div class="metric-data-values-right">
+                            <span class="val-past">72%</span>
+                            <span class="val-current">88%</span>
+                            <span class="val-growth-badge"><i data-lucide="arrow-up" size="10"></i>16%</span>
+                        </div>
+                    </div>
+                    <div class="bar-track-slider-visual">
+                        <div class="bar-fill-past" data-width="72%"></div>
+                        <div class="bar-fill-current" data-width="88%"></div>
+                    </div>
+                </div>
+
+                <!-- Metric 3: Skin Texture -->
+                <div class="metric-row-item">
+                    <div class="metric-label-node">
+                        <div class="metric-meta-left">
+                            <div class="metric-icon-badge"><i data-lucide="sparkles" size="15"></i></div>
+                            <div class="metric-text-details">
+                                <h4>Skin Texture</h4>
+                                <p>Smoothness & evenness</p>
+                            </div>
+                        </div>
+                        <div class="metric-data-values-right">
+                            <span class="val-past">65%</span>
+                            <span class="val-current">82%</span>
+                            <span class="val-growth-badge"><i data-lucide="arrow-up" size="10"></i>17%</span>
+                        </div>
+                    </div>
+                    <div class="bar-track-slider-visual">
+                        <div class="bar-fill-past" data-width="65%"></div>
+                        <div class="bar-fill-current" data-width="82%"></div>
+                    </div>
+                </div>
+
+                <!-- Metric 4: Barrier Strength -->
+                <div class="metric-row-item">
+                    <div class="metric-label-node">
+                        <div class="metric-meta-left">
+                            <div class="metric-icon-badge"><i data-lucide="shield" size="15"></i></div>
+                            <div class="metric-text-details">
+                                <h4>Barrier Strength</h4>
+                                <p>Skin barrier health</p>
+                            </div>
+                        </div>
+                        <div class="metric-data-values-right">
+                            <span class="val-past">70%</span>
+                            <span class="val-current">90%</span>
+                            <span class="val-growth-badge"><i data-lucide="arrow-up" size="10"></i>20%</span>
+                        </div>
+                    </div>
+                    <div class="bar-track-slider-visual">
+                        <div class="bar-fill-past" data-width="70%"></div>
+                        <div class="bar-fill-current" data-width="90%"></div>
+                    </div>
+                </div>
+
+                <!-- Metric 5: Redness (Down is good) -->
+                <div class="metric-row-item">
+                    <div class="metric-label-node">
+                        <div class="metric-meta-left">
+                            <div class="metric-icon-badge"><i data-lucide="heart-crack" size="15"></i></div>
+                            <div class="metric-text-details">
+                                <h4>Redness</h4>
+                                <p>Level of redness & irritation</p>
+                            </div>
+                        </div>
+                        <div class="metric-data-values-right">
+                            <span class="val-past">35%</span>
+                            <span class="val-current" style="color:#C94A4A;">18%</span>
+                            <span class="val-growth-badge negative"><i data-lucide="arrow-down" size="10"></i>17%</span>
+                        </div>
+                    </div>
+                    <div class="bar-track-slider-visual">
+                        <div class="bar-fill-past" data-width="35%"></div>
+                        <div class="bar-fill-current" data-width="18%" style="background:linear-gradient(90deg, #D1C9BC 0%, #C94A4A 100%);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================================
+           ✨ CARD 3: INSIGHTS & ROUTINE ACTION BANNER
+        ======================================================== -->
+        <section class="insights-banner-gradient-card">
+            <div class="star-3d-visual-wrapper">
+                <i data-lucide="star" class="star-floating-icon" size="32" fill="#EADFf7"></i>
+            </div>
+            <div class="insights-body-content">
+                <h3>Insights & Tips <i data-lucide="info" size="12" style="color:var(--text-muted); stroke-width:2.5;"></i></h3>
+                <p>Your skin is improving consistently! ✨ Hydration and barrier health have shown the most progress.</p>
+                
+                <div class="tip-sub-pill-row">
+                    <i data-lucide="lightbulb" size="14" style="color:var(--accent-purple); flex-shrink:0; margin-top:1px;"></i>
+                    <span>Keep using hydrating products and don't forget sunscreen.</span>
+                </div>
+            </div>
+            <div class="circle-arrow-next-btn"><i data-lucide="chevron-right" size="14"></i></div>
+        </section>
+
+
+        <!-- ========================================================
+           🕒 CARD 4: SKINCARE SCAN HISTORY ROW ITEM
+        ======================================================== -->
+        <section class="history-section-wrapper">
+            <div class="section-headline-bar">
+                <h3>Scan History</h3>
+                <a href="#">See all <i data-lucide="chevron-right" size="12"></i></a>
+            </div>
+
+            <div class="history-product-card-item">
+                <div class="history-left-product-info">
+                    <!-- Placeholder skincare product bottle image -->
+                    <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=150&auto=format&fit=crop" class="product-thumbnail-frame" alt="The Ordinary">
+                    <div class="product-meta-text">
+                        <h4>The Ordinary</h4>
+                        <p>Natural Moisturizing Factors + HA</p>
+                        <p style="font-size:9.5px; margin-top:1px;">Moisturizer &bull; 100ml</p>
+                    </div>
+                </div>
+
+                <div class="history-right-date-badge">
+                    <span class="today-pinnable-badge">Today</span>
+                    <span class="history-timestamp-lbl">May 12, 2024</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========================================================
+           ⚙️ INTERACTIVE AUTOMATION & PROGRESS FILL OVERLAY SCRIPT
+    ======================================================== -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // ایجاد المان‌های نمادین Lucide
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+
+            // تریگر کردن پله‌پله و انیمیشنی لود بارها و چارت‌های مقایسه‌ای صفحه
+            setTimeout(() => {
+                const pastBars = document.querySelectorAll('.bar-fill-past');
+                const currentBars = document.querySelectorAll('.bar-fill-current');
+
+                pastBars.forEach(bar => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    bar.style.width = targetWidth;
+                });
+
+                currentBars.forEach(bar => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    bar.style.width = targetWidth;
+                });
+            }, 400);
+        });
+    </script>
+</body>
+</html>

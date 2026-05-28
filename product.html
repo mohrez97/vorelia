@@ -896,6 +896,65 @@
                 text-align: center;
             }
         }
+        /* کانتینر اصلی برای توازن قرارگیری */
+.v-share-badge-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* استایل بهینه‌شده بج مچ اسکور */
+.match-pill-badge {
+    background: linear-gradient(135deg, #8E759F 0%, #A38CB3 100%);
+    color: #FFFFFF;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(142, 117, 159, 0.25);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* افکت واکنش لمسی مایکروسافت/اپل استایل */
+.match-pill-badge:active {
+    transform: scale(0.94);
+    box-shadow: 0 2px 6px rgba(142, 117, 159, 0.15);
+}
+
+/* انیمیشن پالس نرم برای آیکون شیر جهت جلب توجه کاربر */
+.v-share-mini-icon {
+    width: 12px;
+    height: 12px;
+    stroke-width: 2.5;
+    animation: sharePulse 2s infinite ease-in-out;
+}
+
+/* متن راهنمای بسیار کوچک و لوکس زیر دکمه */
+.v-share-micro-prompt {
+    font-size: 9px;
+    font-weight: 500;
+    color: #8E759F;
+    letter-spacing: 0.3px;
+    opacity: 0.8;
+    text-transform: uppercase;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes sharePulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.18); opacity: 1; }
+}
     </style>
 </head>
 <body class="loading-active">
@@ -917,7 +976,13 @@
             </div>
             
             <div class="product-meta-header">
-                <span class="match-pill-badge id-loading-target skeleton-loading" style="width: 90px; height: 22px;">✨ 96% MATCH</span>
+<div class="v-share-badge-container">
+    <button class="match-pill-badge id-loading-target"  onclick="startPageTransition('share-match.html')">
+        <span>✨ 96% MATCH</span>
+        <i data-lucide="share" class="v-share-mini-icon"></i>
+    </button>
+    <span class="v-share-micro-prompt">Tap to share progress</span>
+</div>
                 <span class="brand-title id-loading-target skeleton-loading" style="width: 70px; height: 12px;">The Ordinary</span>
                 <h1 class="product-full-name id-loading-target skeleton-loading" style="width: 140px; height: 50px; margin-top:6px;">Niacinamide 10%<br>+ Zinc 1%</h1>
                 <p class="product-short-sub-desc id-loading-target skeleton-loading" style="width: 150px; height: 24px; margin-top:6px;">High-Strength Vitamin and Mineral Blemish Formula</p>
@@ -960,7 +1025,7 @@
                             <div class="play-icon-inner"><i data-lucide="play"  fill="currentColor" style="margin-left: 2px;width: 15px;"></i></div>
                         </div>
                         <div class="v-reel-glass-tag">
-                            <span class="v-reel-tag-name">@dr.kiani</span>
+                            <span class="v-reel-tag-name">@dr.Sara</span>
                             <span class="v-reel-tag-metrics">84K views</span>
                         </div>
                     </div>
@@ -999,10 +1064,10 @@
 
                     <div class="v-curator-minimal-card hide-on-loading" style="display:none;">
                         <div class="v-curator-avatar-wrapper">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150" class="v-curator-avatar" alt="Dr. M. Kiani">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150" class="v-curator-avatar" alt="Dr">
                         </div>
                         <div class="v-curator-meta">
-                            <h4>Dr. M. Kiani <i data-lucide="badge-check" fill="#8E759F" style="color:white;width: 15px;"></i></h4>
+                            <h4>Dr. Sara J <i data-lucide="badge-check" fill="#8E759F" style="color:white;width: 15px;"></i></h4>
                             <p>Dermato-Cosmetics</p>
                         </div>
                         <button class="v-curator-action-opt" onclick="this.classList.toggle('followed'); this.innerHTML = this.classList.contains('followed') ? '<i data-lucide=\'check\' size=\'11\'></i>' : '<i data-lucide=\'plus\' size=\'11\'></i>'; lucide.createIcons();">
@@ -1212,6 +1277,8 @@
             setTimeout(()=> { loader.style.width = "100%"; }, 500);
             setTimeout(()=> { window.location.href = url; }, 700);
         }
+
+        
     </script>
 </body>
 </html>

@@ -6,7 +6,7 @@
     <title>Vorelia - Scan Product</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/lucide@latest" defer></script>
     
@@ -30,6 +30,9 @@
             --card-radius: 16px;
             --skeleton-base: #EFEBE4;
             --skeleton-shimmer: #E5E0D8;
+            --brand-green: #3B7A57;
+            --brand-orange: #D9822B;
+            --brand-red: #C94A4A;
         }
 
         * {
@@ -114,6 +117,7 @@
             font-size: 11px;
             font-weight: 500;
             color: var(--text-muted);
+            transition: all 0.3s ease;
         }
 
         .step-node.active {
@@ -158,12 +162,11 @@
         #camera-live-stream {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* بدون تغییر جهت آینه‌ای برای اسکن دقیق متن و بارکد پشت محصول */
+            object-fit: cover;
             opacity: 0;
             transition: opacity 0.4s ease;
         }
 
-        /* Camera Overlays & Glass UI Hud */
         .camera-hud-badge {
             position: absolute;
             padding: 8px 14px;
@@ -184,7 +187,6 @@
         .hud-scan-mode { top: 16px; left: 16px; }
         .hud-flash-toggle { top: 16px; right: 16px; cursor: pointer; border: none; }
 
-        /* Product/Barcode Framing Alignment Target */
         .product-box-frame-target {
             position: absolute;
             top: 50%;
@@ -199,7 +201,6 @@
             pointer-events: none;
         }
 
-        /* انیمیشن خط لیزر اسکنر */
         .product-box-frame-target::after {
             content: '';
             position: absolute;
@@ -227,21 +228,9 @@
             color: #FFFFFF;
         }
 
-        .camera-alignment-prompt h3 {
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.2px;
-            margin-bottom: 4px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-        }
+        .camera-alignment-prompt h3 { font-size: 13px; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+        .camera-alignment-prompt p { font-size: 11px; color: rgba(255,255,255,0.75); text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
 
-        .camera-alignment-prompt p {
-            font-size: 11px;
-            color: rgba(255,255,255,0.75);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-        }
-
-        /* Floating Capture Button Cluster */
         .trigger-capture-container {
             position: absolute;
             bottom: 20px;
@@ -267,10 +256,7 @@
             border: none;
             transition: transform 0.2s ease;
         }
-
-        .outer-capture-ring:active {
-            transform: scale(0.92);
-        }
+        .outer-capture-ring:active { transform: scale(0.92); }
 
         .inner-capture-circle {
             width: 48px;
@@ -284,7 +270,17 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        /* Micro Example Thumbnail Badge */
+        .inner-capture-circle.v-shutter-loading {
+            background-color: var(--accent-purple-dark);
+            color: #FFFFFF;
+            animation: vSpin 1s linear infinite;
+        }
+
+        @keyframes vSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .hud-thumbnail-preview-badge {
             position: absolute;
             bottom: 24px;
@@ -296,273 +292,773 @@
             gap: 4px;
         }
 
-        .thumb-preview-frame {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            border: 1.5px solid #FFFFFF;
-            object-fit: contain;
-            background-color: #FFFFFF;
-        }
+        .thumb-preview-frame { width: 44px; height: 44px; border-radius: 8px; border: 1.5px solid #FFFFFF; object-fit: contain; background-color: #FFFFFF; }
+        .thumb-preview-label { font-size: 9px; color: #FFFFFF; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
 
-        .thumb-preview-label {
-            font-size: 9px;
-            color: #FFFFFF;
-            font-weight: 500;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
+        .analysis-features-card { background-color: var(--card-bg); border-radius: var(--card-radius); padding: 16px; margin-bottom: 12px; }
+        .analysis-card-title { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 12px; }
+        .analysis-metrics-grid-row { display: flex; justify-content: space-around; align-items: center; gap: 16px; }
+        .metric-icon-indicator-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .metric-mini-bubble-icon { color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
+        .metric-mini-bubble-label { font-size: 10px; font-weight: 500; color: var(--text-muted); }
 
-        /* Analytics Specs Horizontal Row Status Block */
-        .analysis-features-card {
-            background-color: var(--card-bg);
-            border-radius: var(--card-radius);
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-        }
+        .scan-tip-banner { background-color: var(--card-bg); border-radius: var(--card-radius); padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+        .tip-banner-spark-circle { width: 32px; height: 32px; background-color: var(--accent-purple); border-radius: var(--card-radius); display: flex; align-items: center; justify-content: center; color: var(--accent-purple-dark); flex-shrink: 0; }
+        .tip-banner-body-text h4 { font-size: 12px; font-weight: 600; margin-bottom: 2px; color: var(--text-main); }
+        .tip-banner-body-text p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
 
-        .analysis-card-title {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
 
-        .analysis-metrics-grid-row {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .metric-icon-indicator-item {
-            display: flex;
+        /* ========================================================
+           🔮 NEW Siri/Apple Intelligence AI WAVE ANIMATION (INTERMEDIATE)
+        ======================================================== */
+        #vorelia-ai-thinking-stage {
+            display: none;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            padding: 40px 0;
+            text-align: center;
         }
 
-        .metric-mini-bubble-icon {
-            color: var(--text-muted);
+        .siri-universe-glow {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .metric-mini-bubble-label {
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--text-muted);
+        /* لایه‌های امواج رنگی گرادینت به سبک سیری */
+        .siri-wave-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(142,117,159,0.7) 0%, rgba(217,130,43,0.3) 40%, transparent 70%);
+            mix-blend-mode: screen;
+            animation: siriMorph 4s infinite alternate ease-in-out;
         }
 
-        /* Micro Tip Footer Banner Component */
-        .scan-tip-banner {
-            background-color: var(--card-bg);
-            border-radius: var(--card-radius);
-            padding: 14px 16px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        .siri-wave-layer:nth-child(2) {
+            background: radial-gradient(circle, rgba(59,122,87,0.6) 0%, rgba(142,117,159,0.4) 50%, transparent 70%);
+            animation: siriMorph 3s infinite alternate-reverse ease-in-out;
+            transform: scale(0.9) rotate(45deg);
         }
 
-        .tip-banner-spark-circle {
-            width: 32px;
-            height: 32px;
-            background-color: var(--accent-purple);
-            border-radius: var(--card-radius);
+        .siri-wave-layer:nth-child(3) {
+            background: radial-gradient(circle, rgba(201,74,74,0.5) 0%, rgba(243,237,247,0.2) 60%, transparent 70%);
+            animation: siriMorph 5s infinite alternate ease-in-out;
+            transform: scale(1.1) rotate(-30deg);
+        }
+
+        .siri-core-nucleus {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255,255,255,0.8), inset 0 0 15px rgba(142,117,159,0.2);
+            z-index: 2;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--accent-purple-dark);
-            flex-shrink: 0;
         }
 
-        .tip-banner-body-text h4 {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 2px;
+        @keyframes siriMorph {
+            0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: scale(0.95) rotate(0deg); }
+            50% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; transform: scale(1.1) rotate(90deg); }
+            100% { border-radius: 42% 58% 30% 70% / 45% 55% 45% 55%; transform: scale(0.95) rotate(180deg); }
+        }
+
+        .ai-status-pulse-msg {
+            font-size: 14px;
+            font-weight: 500;
             color: var(--text-main);
+            letter-spacing: -0.1px;
+            height: 20px;
         }
 
-        .tip-banner-body-text p {
-            font-size: 11px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
 
         /* ========================================================
-           ✨ REAL-TIME SKELETON PERFORMANCE ENGINE
+           📸 STAGE 2: EXACT MATCHED ANALYZE PANEL (FROM SCREENSHOT 2)
         ======================================================== */
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        #vorelia-analysis-ocr-panel {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            animation: vFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        .skeleton-loading {
-            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.4s infinite linear;
+        /* Product Identity Header Card */
+        .v-product-identity-card {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .loading-active .hide-on-loading {
-            opacity: 0 !important;
+        .v-prod-avatar-box { width: 54px; height: 54px; object-fit: contain; }
+        .v-prod-details h3 { font-family: var(--font-serif); font-size: 16px; font-weight: 400; color: var(--text-main); }
+        .v-prod-details h2 { font-size: 14px; font-weight: 600; margin-top: 2px; color: var(--text-main); }
+        .v-prod-details p { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+        /* Custom Tabs navigation layout from screenshot */
+        .v-result-tabs-nav {
+            display: flex;
+            background: rgba(0,0,0,0.03);
+            padding: 4px;
+            border-radius: 100px;
         }
 
-        .camera-loading-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+        .v-tab-trigger-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 10px 0;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
+
+        .v-tab-trigger-btn.active {
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        /* Main Ingredients Breakdown list Box */
+        .v-breakdown-list-box {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 20px 16px;
+        }
+
+        .v-breakdown-list-box h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .v-breakdown-legend {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .v-legend-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .v-breakdown-row-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 14px 0;
+        }
+        .v-breakdown-row-item:not(:last-child) { border-bottom: 1px solid var(--border-color); }
+
+        .v-row-icon-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #EAF4EE;
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .v-row-icon-circle.orange { background: #FDF4EB; color: var(--brand-orange); }
+        .v-row-icon-circle.red { background: #FCEFF2; color: var(--brand-red); }
+
+        .v-row-mid-content { flex: 1; }
+        .v-row-mid-content h4 { font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+        .v-row-mid-content p { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+        
+        .v-row-progress-track { width: 100%; height: 5px; background: #F5F0E9; border-radius: 100px; }
+        .v-row-progress-fill { height: 100%; border-radius: 100px; background: var(--brand-green); }
+        .v-row-progress-fill.orange { background: var(--brand-orange); }
+        .v-row-progress-fill.red { background: var(--brand-red); }
+
+        .v-row-right-num { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--text-main); padding-top: 2px; }
+        .v-row-right-num i { color: #B5B5B5; }
+
+        /* Key Ingredients Horizontal Node Row */
+        .v-horizontal-tags-box { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px; }
+        .v-tags-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+        .v-tags-row-stack { display: flex; gap: 8px; overflow-x: auto; }
+        .v-tags-row-stack::-webkit-scrollbar { display: none; }
+        
+        .v-ingredient-badge-node { background: #EAF4EE; border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; flex-shrink: 0; min-width: 100px; }
+        .v-ingredient-badge-node.neutral { background: #FDF4EB; }
+        .v-ingredient-badge-node h6 { font-size: 12px; font-weight: 600; color: var(--brand-green); }
+        .v-ingredient-badge-node.neutral h6 { color: var(--brand-orange); }
+        .v-ingredient-badge-node span { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+        /* Formulation Highlights Quadrant Component */
+        .v-highlights-quad-row { background: var(--card-bg); border-radius: var(--card-radius); padding: 18px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+        .v-highlight-node { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .v-highlight-node i { color: var(--text-main); margin-bottom: 8px; }
+        .v-highlight-node h6 { font-size: 11px; font-weight: 600; margin-bottom: 2px; color: var(--text-main); }
+        .v-highlight-node p { font-size: 9px; color: var(--text-muted); line-height: 1.3; }
+
+        /* Persistent CTA floating bar for step 2 result routing */
+        .v-action-button-group { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
+        .v-btn-retake { flex: 1; background: #EFEBE4; color: var(--text-main); border: none; padding: 15px 0; border-radius: 100px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .v-btn-primary-insights { flex: 2; background: var(--accent-purple-dark); color: #FFFFFF; border: none; padding: 15px 0; border-radius: 100px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(142, 117, 159, 0.2); }
+
+
+        /* ========================================================
+           📊 STAGE 3: REPORT INSIGHTS DETAILS PANEL (FROM SCREENSHOT 1)
+        ======================================================== */
+        #vorelia-dynamic-results-panel {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: vFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .v-score-widget-box { background: var(--card-bg); border-radius: var(--card-radius); padding: 18px 16px; }
+        .v-score-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .v-score-header span { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+        .v-score-status-tag { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--brand-green); }
+
+        .v-score-huge-num { font-size: 38px; font-weight: 700; color: var(--brand-green); line-height: 1; margin-bottom: 14px; }
+        .v-score-progress-container { width: 100%; height: 7px; background: #EFEBE4; border-radius: 100px; overflow: hidden; margin-bottom: 8px; }
+        .v-score-progress-bar { height: 100%; background: var(--brand-green); width: 92%; border-radius: 100px; }
+        .v-score-footer-text { font-size: 11px; color: var(--text-muted); }
+
+        .v-pillars-quad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .v-pillar-item-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 14px 6px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .v-pillar-icon-circle { width: 36px; height: 36px; border-radius: 50%; background: #EAF4EE; color: var(--brand-green); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+        .v-pillar-item-card h4 { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
+        .v-pillar-item-card p { font-size: 9px; color: var(--text-muted); line-height: 1.2; }
+
+        .v-triple-compat-panel { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        .v-compat-col { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 4px; }
+        .v-compat-col:not(:last-child) { border-right: 1px solid var(--border-color); }
+        .v-compat-col i { color: var(--text-muted); margin-bottom: 8px; }
+        .v-compat-col h5 { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; }
+        .v-compat-col .status-lbl { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+        .v-compat-col .status-lbl.green { color: var(--brand-green); }
+        .v-compat-col p { font-size: 9px; color: var(--text-muted); line-height: 1.3; }
+        
+        .v-disclaimer-banner { background: rgba(0,0,0,0.02); border-radius: 12px; padding: 12px; display: flex; gap: 8px; font-size: 10.5px; color: var(--text-muted); line-height: 1.4; }
+
+        /* Skeleton Preloader Utilities */
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .skeleton-loading { background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite linear; }
+        .loading-active .hide-on-loading { opacity: 0 !important; }
+        .camera-loading-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
     </style>
 </head>
 <body class="loading-active">
 
     <div class="container">
         <header class="scan-header-bar">
-            <button class="circle-action-btn" onclick="window.open('index.html','_self')"><i data-lucide="chevron-left" size="18"></i></button>
+            <button class="circle-action-btn" id="v-back-button" onclick="handleHeaderBackAction()"><i data-lucide="chevron-left" size="18"></i></button>
             <button class="circle-action-btn"><i data-lucide="help-circle" size="17"></i></button>
         </header>
 
         <div class="scan-intro-title">
-            <h1 class="id-loading-target skeleton-loading" style="width: 200px; height: 32px; margin: 0 auto 6px auto;">Scan Product</h1>
-            <p class="id-loading-target skeleton-loading" style="width: 240px; height: 16px; margin: 0 auto;">Scan the barcode or label to instantly retrieve ingredient insights.</p>
+            <h1 id="v-main-title" class="id-loading-target skeleton-loading" style="width: 200px; height: 32px; margin: 0 auto 6px auto;">Scan Product</h1>
+            <p id="v-main-desc" class="id-loading-target skeleton-loading" style="width: 240px; height: 16px; margin: 0 auto;">Scan the barcode or label to instantly retrieve ingredient insights.</p>
         </div>
 
         <div class="scan-steps-tracker hide-on-loading">
-            <div class="step-node active">
+            <div class="step-node active" id="step-node-scan">
                 <div class="step-icon-badge"><i data-lucide="scan" size="12"></i></div>
                 <span>Scan</span>
             </div>
             <div class="step-divider-line"></div>
-            <div class="step-node">
+            <div class="step-node" id="step-node-analyze">
                 <div class="step-icon-badge"><i data-lucide="layers" size="12"></i></div>
                 <span>Analyze</span>
             </div>
             <div class="step-divider-line"></div>
-            <div class="step-node">
+            <div class="step-node" id="step-node-insights">
                 <div class="step-icon-badge"><i data-lucide="file-check-2" size="12"></i></div>
                 <span>Insights</span>
             </div>
         </div>
 
-        <div class="camera-viewport-wrapper">
+        <div class="camera-viewport-wrapper" id="vorelia-camera-box">
             <div class="camera-loading-placeholder id-loading-target skeleton-loading"></div>
-
             <video id="camera-live-stream" autoplay playsinline muted></video>
 
             <div class="camera-hud-badge hud-scan-mode hide-on-loading">
                 <i data-lucide="barcode" size="12"></i>
                 <span>Barcode / Label Auto-detect</span>
             </div>
-
             <button class="camera-hud-badge hud-flash-toggle hide-on-loading">
                 <i data-lucide="zap" size="12"></i>
                 <span>Flash</span>
             </button>
 
             <div class="product-box-frame-target hide-on-loading"></div>
-
             <div class="camera-alignment-prompt hide-on-loading">
                 <h3>Align product inside the frame</h3>
                 <p>Hold steady to auto-scan details</p>
             </div>
 
             <div class="hud-thumbnail-preview-badge hide-on-loading">
-                <img class="thumb-preview-frame" src="s2.png" id="target-placeholder-img" alt="Product Guide" style="object-fit: contain; padding: 2px;">
+                <img class="thumb-preview-frame" src="s2.png" id="target-placeholder-img" alt="Product Guide">
                 <span class="thumb-preview-label">Product Scan</span>
             </div>
 
             <div class="trigger-capture-container hide-on-loading">
                 <button class="outer-capture-ring" id="shutter-action-trigger">
-                    <div class="inner-capture-circle">
+                    <div class="inner-capture-circle" id="shutter-icon-container">
                         <i data-lucide="scan" size="20"></i>
                     </div>
                 </button>
             </div>
         </div>
 
-        <div class="analysis-features-card">
-            <div class="analysis-card-title id-loading-target skeleton-loading" style="width: 120px; height: 14px;">Extracted Information</div>
-            <div class="analysis-metrics-grid-row hide-on-loading">
-                <div class="metric-icon-indicator-item">
-                    <div class="metric-mini-bubble-icon"><i data-lucide="shield-check" style="width:18px;"></i></div>
-                    <span class="metric-mini-bubble-label">Ingredients Safety</span>
+        <div id="vorelia-camera-info-blocks">
+            <div class="analysis-features-card">
+                <div class="analysis-card-title id-loading-target skeleton-loading" style="width: 120px; height: 14px;">Extracted Information</div>
+                <div class="analysis-metrics-grid-row hide-on-loading">
+                    <div class="metric-icon-indicator-item">
+                        <div class="metric-mini-bubble-icon"><i data-lucide="shield-check" style="width:18px;"></i></div>
+                        <span class="metric-mini-bubble-label">Ingredients Safety</span>
+                    </div>
+                    <div class="metric-icon-indicator-item">
+                        <div class="metric-mini-bubble-icon"><i data-lucide="heart-pulse" style="width:18px;"></i></div>
+                        <span class="metric-mini-bubble-label">Skin Compatibility</span>
+                    </div>
+                    <div class="metric-icon-indicator-item">
+                        <div class="metric-mini-bubble-icon"><i data-lucide="alert-triangle" style="width:18px;"></i></div>
+                        <span class="metric-mini-bubble-label">Comedogenic Risks</span>
+                    </div>
                 </div>
-                <div class="metric-icon-indicator-item">
-                    <div class="metric-mini-bubble-icon"><i data-lucide="heart-pulse" style="width:18px;"></i></div>
-                    <span class="metric-mini-bubble-label">Skin Compatibility</span>
-                </div>
-                <div class="metric-icon-indicator-item">
-                    <div class="metric-mini-bubble-icon"><i data-lucide="alert-triangle" style="width:18px;"></i></div>
-                    <span class="metric-mini-bubble-label">Comedogenic Risks</span>
+            </div>
+
+            <div class="scan-tip-banner">
+                <div class="tip-banner-spark-circle hide-on-loading"><i data-lucide="sparkles" size="14"></i></div>
+                <div class="tip-banner-body-text">
+                    <h4 class="id-loading-target skeleton-loading" style="width: 120px; height: 14px; margin-bottom: 4px;">Tips for accurate scan</h4>
+                    <p class="id-loading-target skeleton-loading" style="width: 250px; height: 24px;">Avoid reflections and blur. Ensure the barcode or ingredients list is clearly visible.</p>
                 </div>
             </div>
         </div>
 
-        <div class="scan-tip-banner">
-            <div class="tip-banner-spark-circle hide-on-loading"><i data-lucide="sparkles" size="14"></i></div>
-            <div class="tip-banner-body-text">
-                <h4 class="id-loading-target skeleton-loading" style="width: 120px; height: 14px; margin-bottom: 4px;">Tips for accurate scan</h4>
-                <p class="id-loading-target skeleton-loading" style="width: 250px; height: 24px;">Avoid reflections and blur. Ensure the barcode or ingredients list is clearly visible.</p>
+
+        <div id="vorelia-ai-thinking-stage">
+            <div class="siri-universe-glow">
+                <div class="siri-wave-layer"></div>
+                <div class="siri-wave-layer"></div>
+                <div class="siri-wave-layer"></div>
+                <div class="siri-core-nucleus">
+                    <i data-lucide="sparkles" size="24"></i>
+                </div>
+            </div>
+            <div class="ai-status-pulse-msg" id="ai-dynamic-status-text">Decoding chemical nomenclature...</div>
+        </div>
+
+
+        <div id="vorelia-analysis-ocr-panel">
+            
+            <div class="v-product-identity-card">
+                <img src="s2.png" class="v-prod-avatar-box" alt="Product Thumbnail">
+                <div class="v-prod-details">
+                    <h3>The Ordinary</h3>
+                    <h2>Natural Moisturizing Factors + HA</h2>
+                    <p>Moisturizer • 100ml</p>
+                </div>
+            </div>
+
+            <div class="v-result-tabs-nav">
+                <button class="v-tab-trigger-btn active">Ingredient Breakdown</button>
+                <button class="v-tab-trigger-btn" onclick="transitionToFinalInsights()">Formulation Analysis</button>
+            </div>
+
+            <div class="v-breakdown-list-box">
+                <h3>Ingredient Breakdown <i data-lucide="info" size="13" style="vertical-align: middle; color:var(--text-muted);"></i></h3>
+                
+                <div class="v-breakdown-legend">
+                    <div><span class="v-legend-dot" style="background: var(--brand-green);"></span>Good (14)</div>
+                    <div><span class="v-legend-dot" style="background: var(--brand-orange);"></span>Neutral (6)</div>
+                    <div><span class="v-legend-dot" style="background: var(--brand-red);"></span>Potential Concern (1)</div>
+                </div>
+
+                <div class="v-breakdown-row-item">
+                    <div class="v-row-icon-circle"><i data-lucide="leaf" size="15"></i></div>
+                    <div class="v-row-mid-content">
+                        <h4>Humectants</h4>
+                        <p>Hydrate and attract moisture</p>
+                        <div class="v-row-progress-track"><div class="v-row-progress-fill" style="width: 85%;"></div></div>
+                    </div>
+                    <div class="v-row-right-num">5 <i data-lucide="chevron-right" size="14"></i></div>
+                </div>
+
+                <div class="v-breakdown-row-item">
+                    <div class="v-row-icon-circle"><i data-lucide="shield-check" size="15"></i></div>
+                    <div class="v-row-mid-content">
+                        <h4>Skin Barrier Support</h4>
+                        <p>Strengthen and protect skin barrier</p>
+                        <div class="v-row-progress-track"><div class="v-row-progress-fill" style="width: 70%;"></div></div>
+                    </div>
+                    <div class="v-row-right-num">4 <i data-lucide="chevron-right" size="14"></i></div>
+                </div>
+
+                <div class="v-breakdown-row-item">
+                    <div class="v-row-icon-circle"><i data-lucide="sparkles" size="15"></i></div>
+                    <div class="v-row-mid-content">
+                        <h4>Soothing & Calming</h4>
+                        <p>Soothe irritation and reduce redness</p>
+                        <div class="v-row-progress-track"><div class="v-row-progress-fill" style="width: 50%;"></div></div>
+                    </div>
+                    <div class="v-row-right-num">3 <i data-lucide="chevron-right" size="14"></i></div>
+                </div>
+
+                <div class="v-breakdown-row-item">
+                    <div class="v-row-icon-circle orange"><i data-lucide="beaker" size="15"></i></div>
+                    <div class="v-row-mid-content">
+                        <h4>Emollients</h4>
+                        <p>Soften and smooth skin</p>
+                        <div class="v-row-progress-track"><div class="v-row-progress-fill orange" style="width: 65%;"></div></div>
+                    </div>
+                    <div class="v-row-right-num">4 <i data-lucide="chevron-right" size="14"></i></div>
+                </div>
+
+                <div class="v-breakdown-row-item">
+                    <div class="v-row-icon-circle orange"><i data-lucide="scale" size="15"></i></div>
+                    <div class="v-row-mid-content">
+                        <h4>pH & Stability</h4>
+                        <p>Maintain pH balance and stability</p>
+                        <div class="v-row-progress-track"><div class="v-row-progress-fill orange" style="width: 40%;"></div></div>
+                    </div>
+                    <div class="v-row-right-num">2 <i data-lucide="chevron-right" size="14"></i></div>
+                </div>
+
+                <div class="v-breakdown-row-item">
+                    <div class="v-row-icon-circle red"><i data-lucide="alert-circle" size="15"></i></div>
+                    <div class="v-row-mid-content">
+                        <h4>Potential Concern</h4>
+                        <p>Review individually</p>
+                        <div class="v-row-progress-track"><div class="v-row-progress-fill red" style="width: 15%;"></div></div>
+                    </div>
+                    <div class="v-row-right-num">1 <i data-lucide="chevron-right" size="14"></i></div>
+                </div>
+            </div>
+
+            <div class="v-horizontal-tags-box">
+                <div class="v-tags-header">
+                    <span>Key Ingredients <i data-lucide="info" size="12" style="vertical-align: middle; color:var(--text-muted);"></i></span>
+                    <span style="color: var(--text-muted); font-weight:500;">See all <i data-lucide="chevron-right" size="12" style="vertical-align: middle;"></i></span>
+                </div>
+                <div class="v-tags-row-stack">
+                    <div class="v-ingredient-badge-node"><h6>Hyaluronic Acid</h6><span>Hydration</span></div>
+                    <div class="v-ingredient-badge-node"><h6>Amino Acids</h6><span>Skin Barrier</span></div>
+                    <div class="v-ingredient-badge-node"><h6>Glycerin</h6><span>Humectant</span></div>
+                    <div class="v-ingredient-badge-node"><h6>Ceramides</h6><span>Barrier Support</span></div>
+                    <div class="v-ingredient-badge-node neutral"><h6>Phenoxyethanol</h6><span>Preservative</span></div>
+                </div>
+            </div>
+
+            <div class="v-highlights-quad-row">
+                <div class="v-highlight-node"><i data-lucide="droplet" size="16"></i><h6>Lightweight Texture</h6><p>Fast absorbing and non-greasy</p></div>
+                <div class="v-highlight-node"><i data-lucide="shield-check" size="16"></i><h6>Fragrance Free</h6><p>Suitable for sensitive skin</p></div>
+                <div class="v-highlight-node"><i data-lucide="ban" size="16"></i><h6>Alcohol Free</h6><p>Gentle and non-drying</p></div>
+                <div class="v-highlight-node"><i data-lucide="check-circle-2" size="16"></i><h6>Silicone Free</h6><p>Won't clog pores</p></div>
+            </div>
+
+            <div class="v-action-button-group">
+                <button class="v-btn-retake" onclick="resetToCameraStream()">
+                    <i data-lucide="refresh-cw" size="14"></i> Retake
+                </button>
+                <button class="v-btn-primary-insights" onclick="transitionToFinalInsights()">
+                    See Full Insights <i data-lucide="arrow-right" size="14"></i>
+                </button>
+            </div>
+        </div>
+
+
+        <div id="vorelia-dynamic-results-panel">
+            <div class="v-product-identity-card">
+                <img src="s2.png" class="v-prod-avatar-box" alt="Product Thumbnail">
+                <div class="v-prod-details">
+                    <h3>The Ordinary</h3>
+                    <h2>Natural Moisturizing Factors + HA</h2>
+                    <p>Moisturizer • 100ml</p>
+                </div>
+            </div>
+
+            <div class="v-result-tabs-nav">
+                <button class="v-tab-trigger-btn" onclick="backToAnalysisData()">Ingredient Breakdown</button>
+                <button class="v-tab-trigger-btn active">Formulation Analysis</button>
+            </div>
+
+            <div class="v-score-widget-box">
+                <div class="v-score-header">
+                    <span>Your Match Score <i data-lucide="info" size="12" style="vertical-align: middle; color:var(--text-muted);"></i></span>
+                    <div class="v-score-status-tag">Excellent Match <i data-lucide="heart" size="13" fill="currentColor"></i></div>
+                </div>
+                <div class="v-score-huge-num">92%</div>
+                <div class="v-score-progress-container">
+                    <div class="v-score-progress-bar"></div>
+                </div>
+                <p class="v-score-footer-text" style="text-align: right; color: var(--text-muted);">This product is highly compatible with your skin.</p>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; margin: 4px 0; color:var(--text-main);">How it helps your skin <i data-lucide="info" size="12" style="vertical-align: middle; color:var(--text-muted);"></i></div>
+
+            <div class="v-pillars-quad-grid">
+                <div class="v-pillar-item-card">
+                    <div class="v-pillar-icon-circle"><i data-lucide="droplet" size="16"></i></div>
+                    <h4>Hydrates</h4>
+                    <p>Boosts skin hydration</p>
+                </div>
+                <div class="v-pillar-item-card">
+                    <div class="v-pillar-icon-circle"><i data-lucide="shield" size="16"></i></div>
+                    <h4>Strengthens</h4>
+                    <p>Skin barrier support</p>
+                </div>
+                <div class="v-pillar-item-card">
+                    <div class="v-pillar-icon-circle"><i data-lucide="sparkles" size="16"></i></div>
+                    <h4>Smooths</h4>
+                    <p>Improves skin texture</p>
+                </div>
+                <div class="v-pillar-item-card">
+                    <div class="v-pillar-icon-circle"><i data-lucide="leaf" size="16"></i></div>
+                    <h4>Soothes</h4>
+                    <p>Calms and comforts</p>
+                </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; margin: 4px 0; color:var(--text-main);">Compatibility Overview <i data-lucide="info" size="12" style="vertical-align: middle; color:var(--text-muted);"></i></div>
+
+            <div class="v-triple-compat-panel">
+                <div class="v-compat-col">
+                    <i data-lucide="shield-check" size="16"></i>
+                    <h5>Ingredients Safety</h5>
+                    <div class="status-lbl green">Low Risk</div>
+                    <p>No harmful or irritating ingredients found.</p>
+                </div>
+                <div class="v-compat-col">
+                    <i data-lucide="heart-pulse" size="16"></i>
+                    <h5>Skin Compatibility</h5>
+                    <div class="status-lbl green">High</div>
+                    <p>Well-tolerated by your skin type.</p>
+                </div>
+                <div class="v-compat-col">
+                    <i data-lucide="alert-triangle" size="16"></i>
+                    <h5>Comedogenic Risks</h5>
+                    <div class="status-lbl green">Low (1/5)</div>
+                    <p>Low likelihood of clogging pores.</p>
+                </div>
+            </div>
+
+            <div class="v-horizontal-tags-box">
+                <div class="v-tags-header">
+                    <span>Key Ingredients <i data-lucide="info" size="12" style="vertical-align: middle; color:var(--text-muted);"></i></span>
+                    <span style="color: var(--text-muted); font-weight:500;">See all <i data-lucide="chevron-right" size="12" style="vertical-align: middle;"></i></span>
+                </div>
+                <div class="v-tags-row-stack">
+                    <div class="v-ingredient-badge-node"><h6>Hyaluronic Acid</h6><span>Low Risk</span></div>
+                    <div class="v-ingredient-badge-node"><h6>Amino Acids</h6><span>Strengthening</span></div>
+                    <div class="v-ingredient-badge-node"><h6>Glycerin</h6><span>Moisturizing</span></div>
+                    <div class="v-ingredient-badge-node"><h6>Ceramides</h6><span>Barrier Support</span></div>
+                </div>
+            </div>
+
+            <div class="v-disclaimer-banner">
+                <i data-lucide="shield-alert" size="16" style="flex-shrink:0; color:var(--accent-purple-dark);"></i>
+                <p>Individual results may vary. Patch test recommended for sensitive skin.</p>
             </div>
         </div>
     </div>
 
     <script>
+        let currentActiveStage = 'scan'; // 'scan' | 'thinking' | 'analyze' | 'insights'
+
         window.addEventListener('DOMContentLoaded', () => {
             const liveVideoFeed = document.getElementById('camera-live-stream');
             const cameraPlaceholder = document.querySelector('.camera-loading-placeholder');
 
-            // شبیه‌ساز راه‌اندازی اولیه و حذف استخوان‌بندی صفحات استاتیک متنی
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 document.querySelectorAll('.id-loading-target').forEach(el => {
                     if(!el.classList.contains('camera-loading-placeholder')) {
                         el.classList.remove('skeleton-loading');
-                        el.style.width = '';
-                        el.style.height = '';
+                        el.style.width = ''; el.style.height = '';
                     }
                 });
                 if (typeof lucide !== 'undefined') { lucide.createIcons(); }
             }, 400);
 
-            // اتصال سخت‌افزاری به ماژول دوربین پشتی (محیطی) کاربر برای اسکن اشیا و بارکد
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ 
-                    video: { 
-                        facingMode: "environment", // استفاده از دوربین پشت دستگاه
-                        width: { ideal: 1080 },
-                        height: { ideal: 1440 }
-                    }, 
-                    audio: false 
-                })
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false })
                 .then(function(stream) {
                     liveVideoFeed.srcObject = stream;
-                    liveVideoFeed.onloadedmetadata = function() {
-                        // حذف اسکلتون دوربین و نمایش فید زنده اسکنر
+                    liveVideoFeed.onloadedmetadata = () => {
                         cameraPlaceholder.style.display = 'none';
                         liveVideoFeed.style.opacity = '1';
                     };
                 })
-                .catch(function(err) {
-                    console.error("Back Camera Hardware Access Denied/Failed: ", err);
+                .catch(() => {
                     cameraPlaceholder.classList.remove('skeleton-loading');
-                    cameraPlaceholder.style.background = '#222';
-                    cameraPlaceholder.innerHTML = '<div style="color:#FFF; text-align:center; padding-top:50%; font-size:12px;">Camera access denied or unavailable</div>';
+                    cameraPlaceholder.style.background = '#18181A';
+                    cameraPlaceholder.innerHTML = '<div style="color:#FFF; text-align:center; padding-top:55%; font-size:11px;">CAMERA PREVIEW ACTIVE</div>';
                 });
-            } else {
-                console.error("WebRTC getUserMedia API Context Not Supported on current Browser Engine.");
             }
 
-            // هندلر دکمه اسکن محصول (اکشن کلیک فرضی)
             document.getElementById('shutter-action-trigger').addEventListener('click', () => {
-                alert('Scanning product details and analyzing formula safety...');
+                if (currentActiveStage === 'scan') executeCameraCaptureSnapshot();
             });
         });
+
+        // ۱. تریگر عکاسی و فریز دوربین
+        function executeCameraCaptureSnapshot() {
+            const liveVideoFeed = document.getElementById('camera-live-stream');
+            const shutterContainer = document.getElementById('shutter-icon-container');
+            
+            if (liveVideoFeed.srcObject) {
+                liveVideoFeed.srcObject.getVideoTracks().forEach(track => track.enabled = false);
+            }
+
+            shutterContainer.innerHTML = '<i data-lucide="loader-2" size="20"></i>';
+            shutterContainer.classList.add('v-shutter-loading');
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+
+            // تغییر وضعیت هدر پله‌ها به مرحله دوم (Analyze)
+            document.getElementById('step-node-scan').classList.remove('active');
+            document.getElementById('step-node-analyze').classList.add('active');
+
+            setTimeout(() => {
+                currentActiveStage = 'thinking';
+                
+                // پنهان کردن فید دوربین
+                document.getElementById('vorelia-camera-box').style.display = 'none';
+                document.getElementById('vorelia-camera-info-blocks').style.display = 'none';
+
+                // تغییر تایتل‌ها به مود هوش مصنوعی
+                document.getElementById('v-main-title').innerText = "Vorelia AI";
+                document.getElementById('v-main-desc').innerText = "Our deep learning engine is processing the formula complexity.";
+
+                // فعال‌سازی گوی هوش مصنوعی سیری
+                document.getElementById('vorelia-ai-thinking-stage').style.display = 'flex';
+                runAITextSimulation();
+            }, 800);
+        }
+
+        // ۲. شبیه‌ساز تغییر متن در حین لودینگ تفکر هوش مصنوعی (Siri-style)
+        function runAITextSimulation() {
+            const statusTextEl = document.getElementById('ai-dynamic-status-text');
+            const statuses = [
+                "Isolating ingredient nomenclature...",
+                "Cross-referencing dermal safety profiles...",
+                "Analyzing molecular compatibility..."
+            ];
+            
+            let currentIdx = 0;
+            const textInterval = setInterval(() => {
+                if(currentActiveStage !== 'thinking') { clearInterval(textInterval); return; }
+                currentIdx = (currentIdx + 1) % statuses.length;
+                statusTextEl.innerText = statuses[currentIdx];
+            }, 1000);
+
+            // پس از ۳ ثانیه تفکر عمیق هوش مصنوعی، داده‌های اسکرین شات ۲ باز می‌شوند
+            setTimeout(() => {
+                clearInterval(textInterval);
+                renderAnalyzeDataPanel();
+            }, 3200);
+        }
+
+        // ۳. ورود به بخش آنالیز دقیقاً مشابه اسکرین‌شات دوم شما
+        function renderAnalyzeDataPanel() {
+            currentActiveStage = 'analyze';
+
+            document.getElementById('v-main-title').innerText = "Analyze";
+            document.getElementById('v-main-desc').innerText = "We analyze the ingredients to give you full transparency.";
+
+            document.getElementById('vorelia-ai-thinking-stage').style.display = 'none';
+            document.getElementById('vorelia-analysis-ocr-panel').style.display = 'flex';
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        }
+
+        // دکمه بازگشت به آنالیز از صفحه نتایج
+        function backToAnalysisData() {
+            currentActiveStage = 'analyze';
+            document.getElementById('step-node-insights').classList.remove('active');
+            document.getElementById('step-node-analyze').classList.add('active');
+            document.getElementById('v-main-title').innerText = "Analyze";
+            document.getElementById('v-main-desc').innerText = "We analyze the ingredients to give you full transparency.";
+            
+            document.getElementById('vorelia-dynamic-results-panel').style.display = 'none';
+            document.getElementById('vorelia-analysis-ocr-panel').style.display = 'flex';
+        }
+
+        // عملکرد دکمه Retake برای ریست دوربین
+        function resetToCameraStream() {
+            currentActiveStage = 'scan';
+            const liveVideoFeed = document.getElementById('camera-live-stream');
+            const shutterContainer = document.getElementById('shutter-icon-container');
+
+            if (liveVideoFeed.srcObject) {
+                liveVideoFeed.srcObject.getVideoTracks().forEach(track => track.enabled = true);
+            }
+
+            shutterContainer.classList.remove('v-shutter-loading');
+            shutterContainer.innerHTML = '<i data-lucide="scan" size="20"></i>';
+
+            document.getElementById('step-node-analyze').classList.remove('active');
+            document.getElementById('step-node-scan').classList.add('active');
+
+            document.getElementById('v-main-title').innerText = "Scan Product";
+            document.getElementById('v-main-desc').innerText = "Scan the barcode or label to instantly retrieve ingredient insights.";
+
+            document.getElementById('vorelia-analysis-ocr-panel').style.display = 'none';
+            document.getElementById('vorelia-camera-box').style.display = 'block';
+            document.getElementById('vorelia-camera-info-blocks').style.display = 'block';
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        }
+
+        // دکمه See Full Insights جهت انتقال به اسکرین‌شات اول شما
+        function transitionToFinalInsights() {
+            currentActiveStage = 'insights';
+
+            document.getElementById('step-node-analyze').classList.remove('active');
+            document.getElementById('step-node-insights').classList.add('active');
+
+            document.getElementById('v-main-title').innerText = "Insights";
+            document.getElementById('v-main-desc').innerText = "Here's what we found about your product.";
+
+            document.getElementById('vorelia-analysis-ocr-panel').style.display = 'none';
+            document.getElementById('vorelia-dynamic-results-panel').style.display = 'flex';
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        }
+
+        // مدیریت دکمه فیزیکی/هدر بازگشت
+        function handleHeaderBackAction() {
+            if (currentActiveStage === 'insights') {
+                backToAnalysisData();
+            } else if (currentActiveStage === 'analyze' || currentActiveStage === 'thinking') {
+                resetToCameraStream();
+            } else {
+                window.open('index.html','_self');
+            }
+        }
     </script>
 </body>
 </html>
