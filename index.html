@@ -1867,6 +1867,228 @@ html, body {
     font-weight: 500;
     letter-spacing: 0.5px;
 }
+
+/* کارت اصلی با الهام از متریال یو و جمنای */
+.gemini-style-chat-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-radius: 24px; /* لبه‌های بسیار نرم به سبک گوگل */
+    background: #ffffff;
+    
+    /* ایجاد بوردر گرادینت رنگی جمنای با ضخامت بسیار ظریف */
+    position: relative;
+    border: 1px solid transparent;
+    background-image: linear-gradient(#ffffff, #ffffff), 
+                      linear-gradient(135deg, #4285f4, #9b51e0, #e91e63, #fbbc05);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    
+    /* سایه نرم و شناور گوگل */
+    box-shadow: 0 4px 24px rgba(66, 133, 244, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* افکت هاور کارت (جلوه گرفتن سایه جمنای) */
+.gemini-style-chat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(155, 81, 224, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* افکت کلیک (فشردگی دکمه) */
+.gemini-style-chat-card:active {
+    transform: scale(0.98);
+}
+
+/* تراز کردن بخش سمت چپ کارت */
+.gemini-card-content-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* باکس آیکون با تم رنگی هوش مصنوعی گوگل */
+.gemini-card-icon-container {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* بک‌گراند شلوغ و ملایم با تم جمنای */
+    background: linear-gradient(135deg, rgba(66, 133, 244, 0.08), rgba(155, 81, 224, 0.08));
+    position: relative;
+}
+
+/* رنگ آیکون داخلی */
+.gemini-card-lucide-icon {
+    color: #651fff; /* بنفش پررنگ اختصاصی گوگل متمایل به آبی */
+}
+
+/* گروه متون کارت */
+.gemini-card-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* تیتر اصلی کارت */
+.gemini-card-main-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f1f1f; /* مشکی نرم گوگل */
+    letter-spacing: -0.2px;
+}
+
+/* توضیحات زیرین کارت */
+.gemini-card-sub-description {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #5f6368; /* خاکستری استاندارد متن‌های گوگل */
+    line-height: 1.4;
+}
+
+/* آیکون فلش سمت راست */
+.gemini-card-arrow-icon {
+    color: #757575;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* حرکت نرم آیکون فلش هنگام هاور شدن کارت */
+.gemini-style-chat-card:hover .gemini-card-arrow-icon {
+    transform: translateX(4px);
+    color: #1f1f1f;
+}
+/* کارت اصلی - نقش کانتینر برای انیمیشن پشت صحنه را دارد */
+.gemini-scan-animated-card {
+    position: relative;
+    padding: 1px; /* ضخامت بوردر متحرک */
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0); /* بوردر پیش‌فرض بسیار ملایم */
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* لایه انیمیشن چرخشی رنگ‌های جمنای (بک‌گراند متحرک) */
+.gemini-scan-animated-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    /* رنگ‌های نمادین هوش مصنوعی گوگل و جمنای */
+    background: conic-gradient(
+        transparent, 
+        rgba(66, 133, 244, 0.7),  /* آبی */
+        rgba(155, 81, 224, 0.7),  /* ارغوانی */
+        rgba(233, 30, 99, 0.7),   /* صورتی */
+        transparent 40%
+    );
+    /* انیمیشن چرخش مداوم مثل لودینگ */
+    animation: geminiBorderRotate 4s linear infinite;
+    z-index: 1;
+}
+
+/* لایه داخلی کارت - روی لایه انیمیشن قرار می‌گیرد تا فقط لبه‌ها رنگی بمانند */
+.gemini-scan-card-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-radius: 23px; /* کمی کوچک‌تر از کانتینر اصلی برای فیت شدن */
+    background: #ffffff; /* پس‌زمینه اصلی کارت */
+    z-index: 2;
+    transition: background-color 0.2s ease;
+}
+
+/* انیمیشن چرخش بوردر */
+@keyframes geminiBorderRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* افکت‌های هاور کارت */
+.gemini-scan-animated-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(155, 81, 224, 0.08);
+}
+
+.gemini-scan-animated-card:hover .gemini-scan-card-inner {
+    background: #fff; /* تغییر نرم پس‌زمینه هنگام هاور */
+}
+
+/* افکت کلیک */
+.gemini-scan-animated-card:active {
+    transform: scale(0.98);
+}
+
+/* چیدمان بخش سمت چپ */
+.gemini-scan-content-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* باکس آیکون */
+.gemini-scan-icon-container {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(66, 133, 244, 0.06), rgba(233, 30, 99, 0.06));
+}
+
+/* رنگ آیکون sparkles جرقه‌ای */
+.gemini-scan-lucide-icon {
+    color: #9b51e0; 
+}
+
+/* استایل متون کارت */
+.gemini-scan-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.gemini-scan-main-title {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f1f1f;
+}
+
+.gemini-scan-sub-description {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #5f6368;
+}
+
+/* آیکون فلش سمت راست */
+.gemini-scan-arrow-icon {
+    color: #757575;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.gemini-scan-animated-card:hover .gemini-scan-arrow-icon {
+    transform: translateX(4px);
+    color: #1f1f1f;
+}
 </style>
 </head>
 <body class="loading-active">
@@ -1899,19 +2121,21 @@ html, body {
             <img class="hero-image hide-on-loading" src="s1.png" alt="Model Skin" id="hero-avatar">
         </section>
 
-        <div class="action-card" onclick="startPageTransition('scan.html')">
-            <div class="action-left">
-                <div class="icon-box">
-                    <i data-lucide="sparkles" size="20"></i>
-                </div>
-                <div>
-                    <div class="action-title">Analyze my skin</div>
-                    <div class="action-desc">Get your personalized skin profile</div>
-                </div>
+     <div class="gemini-scan-animated-card" onclick="startPageTransition('scan.html')">
+    <!-- لایه داخلی برای حفظ پس‌زمینه سفید و ساختار کارت -->
+    <div class="gemini-scan-card-inner">
+        <div class="gemini-scan-content-left">
+            <div class="gemini-scan-icon-container">
+                <i data-lucide="sparkles" size="20" class="gemini-scan-lucide-icon"></i>
             </div>
-            <i data-lucide="arrow-right" size="18" stroke-width="1.5"></i>
+            <div class="gemini-scan-text-group">
+                <div class="gemini-scan-main-title">Analyze my skin</div>
+                <div class="gemini-scan-sub-description">Get your personalized skin profile</div>
+            </div>
         </div>
-
+        <i data-lucide="arrow-right" size="18" stroke-width="1.5" class="gemini-scan-arrow-icon"></i>
+    </div>
+</div>
          <!-- 🎬 INSTAGRAM-STYLE REELS ROW -->
         <div class="section-title-row">
             <span class="section-main-title">Trending Reels</span>
@@ -2081,18 +2305,20 @@ html, body {
         </div>
 
        
-        <div class="ai-chat-card" onclick="startPageTransition('chat.html')">
-            <div class="action-left">
-                <div class="icon-box" style="background-color: rgba(142, 117, 159, 0.08);">
-                    <i data-lucide="message-square" size="20" style="color: var(--accent-purple-dark);"></i>
-                </div>
-                <div>
-                    <div class="action-title">Ask Vorelia AI</div>
-                    <div class="action-desc">Get answers about your skin, products, ingredients and more.</div>
-                </div>
-            </div>
-            <i data-lucide="arrow-right" size="18" stroke-width="1.5"></i>
+      <div class="gemini-style-chat-card" onclick="startPageTransition('chat.html')">
+    <div class="gemini-card-content-left">
+        <!-- باکس آیکون با پلت رنگی جمنای -->
+        <div class="gemini-card-icon-container">
+            <i data-lucide="message-square" size="20" class="gemini-card-lucide-icon"></i>
         </div>
+        <div class="gemini-card-text-group">
+            <div class="gemini-card-main-title">Ask Vorelia AI</div>
+            <div class="gemini-card-sub-description">Get answers about your skin, products, ingredients and more.</div>
+        </div>
+    </div>
+    <!-- آیکون فلش سمت راست با استایل مینیمال گوگل -->
+    <i data-lucide="arrow-right" size="18" stroke-width="2" class="gemini-card-arrow-icon"></i>
+</div>
     </div>
 
   <div class="share-text" onclick="window.location.href='mailto:rezamilani81@gmail.com'">
