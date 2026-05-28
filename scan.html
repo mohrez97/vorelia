@@ -683,7 +683,8 @@
         </div>
     </div>
 
-
+<!-- این تگ را قبل از شروع تگ <script> قرار دهید -->
+<canvas id="vorelia-capture-canvas" style="display: none;"></canvas>
     <script>
         let currentScreenStage = 'capture'; // 'capture' | 'thinking' | 'analysis' | 'results'
 
@@ -726,37 +727,59 @@
 
         // ۱. کپچر تصویر و قفل فریم دوربین سلفی
         function executeFaceCapturePipeline() {
-            const liveVideoFeed = document.getElementById('camera-live-stream');
-            const shutterContainer = document.getElementById('shutter-icon-container');
-            
-            if (liveVideoFeed.srcObject) {
-                liveVideoFeed.srcObject.getVideoTracks().forEach(track => track.enabled = false);
-            }
+    const liveVideoFeed = document.getElementById('camera-live-stream');
+    const shutterContainer = document.getElementById('shutter-icon-container');
+    const captureCanvas = document.getElementById('vorelia-capture-canvas');
+    
+    // گرفتن فریم زنده از دوربین و تبدیل آن به عکس واقعی
+    if (liveVideoFeed && liveVideoFeed.srcObject) {
+        const ctx = captureCanvas.getContext('2d');
+        
+        // تنظیم ابعاد کانوس بر اساس ابعاد ویدیو
+        captureCanvas.width = liveVideoFeed.videoWidth || 640;
+        captureCanvas.height = liveVideoFeed.videoHeight || 480;
+        
+        // برعکس کردن افکت آینه‌ای دوربین سلفی تا عکس نهایی کاملاً طبیعی و درست باشد
+        ctx.translate(captureCanvas.width, 0);
+        ctx.scale(-1, 1);
+        
+        // رسم فریم فعلی ویدیو روی کانوس پنهان
+        ctx.drawImage(liveVideoFeed, 0, 0, captureCanvas.width, captureCanvas.height);
+        
+        // تبدیل عکس به فرمت دیتا (Base64)
+        const capturedDataUrl = captureCanvas.toDataURL('image/jpeg');
+        
+        // پیدا کردن عکس‌های پیش‌فرض Unsplash در دو بخش آنالیز و نتایج و جایگذاری عکس کاربر
+        const modelImages = document.querySelectorAll('.v-skin-model-img');
+        modelImages.forEach(img => {
+            img.src = capturedDataUrl;
+        });
 
-            shutterContainer.innerHTML = '<i data-lucide="loader-2" size="20"></i>';
-            shutterContainer.classList.add('v-shutter-loading');
-            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        // متوقف کردن استریم دوربین سلفی پس از ثبت عکس
+        liveVideoFeed.srcObject.getVideoTracks().forEach(track => track.enabled = false);
+    }
 
-            // تغییر مرحله هدر به فاز دوم (Analyze)
-            document.getElementById('step-node-capture').classList.remove('active');
-            document.getElementById('step-node-analyze').classList.add('active');
+    // ادامه منطق و انیمیشن‌های خودت بدون تغییر
+    shutterContainer.innerHTML = '<i data-lucide="loader-2" size="20"></i>';
+    shutterContainer.classList.add('v-shutter-loading');
+    if (typeof lucide !== 'undefined') { lucide.createIcons(); }
 
-            setTimeout(() => {
-                currentScreenStage = 'thinking';
-                
-                // پنهان کردن پنل دوربین سخت‌افزاری
-                document.getElementById('vorelia-camera-box').style.display = 'none';
-                document.getElementById('vorelia-camera-info-blocks').style.display = 'none';
+    document.getElementById('step-node-capture').classList.remove('active');
+    document.getElementById('step-node-analyze').classList.add('active');
 
-                // تغییر متن تایتل‌ها به حالت متفکر هوش مصنوعی
-                document.getElementById('v-main-title').innerText = "Vorelia AI";
-                document.getElementById('v-main-desc').innerText = "Our deep learning diagnosis tool is mapping your complex pore density matrix.";
+    setTimeout(() => {
+        currentScreenStage = 'thinking';
+        
+        document.getElementById('vorelia-camera-box').style.display = 'none';
+        document.getElementById('vorelia-camera-info-blocks').style.display = 'none';
 
-                // فعال‌سازی انیمیشن سیری
-                document.getElementById('vorelia-ai-thinking-stage').style.display = 'flex';
-                simulateDynamicAITexts();
-            }, 800);
-        }
+        document.getElementById('v-main-title').innerText = "Vorelia AI";
+        document.getElementById('v-main-desc').innerText = "Our deep learning diagnosis tool is mapping your complex pore density matrix.";
+
+        document.getElementById('vorelia-ai-thinking-stage').style.display = 'flex';
+        simulateDynamicAITexts();
+    }, 800);
+}
 
         // ۲. ران تایم تغییر متن انیمیشن تفکر سیری
         function simulateDynamicAITexts() {
