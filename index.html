@@ -1524,10 +1524,27 @@ html, body {
         cursor: pointer;
         box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     }
+
+     #wait {
+        transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    #wait.v-fade-out {
+        opacity: 0;
+        transform: scale(1.03); 
+        pointer-events: none;  
+    }
 </style>
 </head>
 <body class="loading-active">
-<div id="top-loader"></div>
+
+<div id="wait" style="text-align:center; background-color: #f5f1e8; position: fixed; top:0; bottom:0; left:0; right:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index: 1000000;">
+    <img src="VORELIA.gif" style="width:180px; height:180px; object-fit:contain;"/>
+</div>
+
+    <div id="top-loader"></div>
     <div class="container">
         <header onclick="startPageTransition('notif.html');">
             <div class="logo">Vorelia</div>
@@ -1963,6 +1980,17 @@ function toggleVReelLike(button) {
         button.querySelector('span').innerText = '14.3K';
     }
 }
+
+window.addEventListener('load', function() {
+    const waitLayer = document.getElementById('wait');
+    if (waitLayer) {
+        waitLayer.classList.add('v-fade-out');
+        
+        setTimeout(() => {
+            waitLayer.style.display = 'none';
+        }, 500);
+    }
+});
     </script>
 </body>
 </html>
