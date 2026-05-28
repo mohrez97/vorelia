@@ -1821,10 +1821,61 @@ html, body {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* استایل اصلی نوتیفیکیشن */
+.toast-notification {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    
+    color: #000;
+    direction: ltr;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 9999;
+    
+    transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+    opacity: 0;
+}
+
+.toast-notification.show {
+    top: 24px;
+    opacity: 1;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toast-icon {
+    font-size: 20px;
+}
+
+.toast-content p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body class="loading-active">
-
+<div id="prototype-toast" class="toast-notification">
+    <div class="toast-content">
+        <span class="toast-icon">⚠️</span>
+        <p>This is a <b>prototype</b> version of Verlia.</p>
+    </div>
+</div>
 <div id="wait" style="text-align:center; background-color: #f5f1e8; position: fixed; top:0; bottom:0; left:0; right:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index: 1000000;">
     <img src="VORELIA.gif" style="width:180px; height:180px; object-fit:contain;"/>
 </div>
@@ -1913,7 +1964,7 @@ html, body {
                 </div>
             </div>
         </div>
-        
+
         <div class="section-header">
             <h2 class="section-title">Your skin at a glance</h2>
             <a href="#" class="section-link">View full report</a>
@@ -2292,7 +2343,15 @@ html, body {
                 document.querySelectorAll('.skeleton-img-placeholder').forEach(ph => {
                     ph.style.display = 'none';
                 });
+const toast = document.getElementById('prototype-toast');
+                setTimeout(() => {
+        toast.classList.add('show');
+    }, 500);
 
+    // ۲. پنهان شدن خودکار
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4500);
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
