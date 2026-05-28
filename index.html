@@ -27,7 +27,7 @@
             --text-muted: #757575;
             --accent-purple: #F3EDF7;
             --accent-purple-dark: #8E759F;
-            --progress-bg: #EAE5DD;
+            --progress-bg: #e3d5ecd7;
             --font-sans: 'Inter', sans-serif;
             --font-serif: 'Playfair Display', serif;
             --skeleton-base: #EFEBE4;
@@ -292,7 +292,7 @@ html, body {
 
         .progress-bar-container {
             width: 100%;
-            height: 3px;
+            height: 4px;
             background-color: var(--progress-bg);
             border-radius: 2px;
             overflow: hidden;
@@ -463,7 +463,7 @@ html, body {
         }
 
         .nav-item.active {
-            color: var(--text-main);
+            color: #31003a;
         }
 
         .nav-item.active span {
@@ -1080,7 +1080,7 @@ html, body {
 .v-reel-product-node {
     background: rgba(255, 255, 255, 1);
     border-radius: 18px;
-    padding: 10px 6px;
+    padding: 10px;
     display: flex;
     flex-direction: column; /* چیدمان داخلی عمودی برای کارت‌های کنار هم */
     align-items: center;
@@ -1115,7 +1115,7 @@ html, body {
 
 /* بج ساده و مینیمالِ مچ اسکور در پایین کارت */
 .v-reel-match-badge-clean {
-    background: linear-gradient(135deg, #181818 0%, #240e33 100%);
+    background: linear-gradient(135deg, #38005b 0%, #240e33 100%);
     color: #FFFFFF;
     font-size: 9px;
     font-weight: 700;
@@ -1864,7 +1864,7 @@ html, body {
 
 .toast-content p {
     margin: 0;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.5px;
 }
@@ -2155,7 +2155,7 @@ html, body {
             <span class="metric-label id-loading-target skeleton-loading">Hydration</span>
             <span class="metric-value id-loading-target skeleton-loading" data-target="72" style="width: 35px; height: 20px; margin-top:4px;">0</span>
             <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
-            <div class="progress-bar-container">
+            <div class="progress-bar-container"  style="opacity: 0.8;">
                 <div class="progress-fill hide-on-loading" data-width="72%" style="width: 0%;"></div>
             </div>
         </div>
@@ -2163,9 +2163,9 @@ html, body {
             <i data-lucide="sparkle" class="metric-icon hide-on-loading" size="16" stroke-width="1.8"></i>
             <span class="metric-label id-loading-target skeleton-loading">Brightness</span>
             <span class="metric-value id-loading-target skeleton-loading" data-target="68" style="width: 35px; height: 20px; margin-top:4px;">0</span>
-            <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Good</span>
-            <div class="progress-bar-container">
-                <div class="progress-fill hide-on-loading" data-width="68%" style="width: 0%;"></div>
+            <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Poor</span>
+            <div class="progress-bar-container" style="opacity: 0.4;">
+                <div class="progress-fill hide-on-loading" data-width="36%" style="width: 0%;"></div>
             </div>
         </div>
         <div class="metric-card">
@@ -2173,7 +2173,7 @@ html, body {
             <span class="metric-label id-loading-target skeleton-loading">Texture</span>
             <span class="metric-value id-loading-target skeleton-loading" data-target="65" style="width: 35px; height: 20px; margin-top:4px;">0</span>
             <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Fair</span>
-            <div class="progress-bar-container">
+            <div class="progress-bar-container" style="opacity: 0.65;">
                 <div class="progress-fill hide-on-loading" data-width="65%" style="width: 0%;"></div>
             </div>
         </div>
@@ -2182,7 +2182,7 @@ html, body {
             <span class="metric-label id-loading-target skeleton-loading">Barrier</span>
             <span class="metric-value id-loading-target skeleton-loading" data-target="80" style="width: 35px; height: 20px; margin-top:4px;">0</span>
             <span class="metric-status id-loading-target skeleton-loading" style="width: 45px; margin-top:2px;">Strong</span>
-            <div class="progress-bar-container">
+            <div class="progress-bar-container" style="height: 5px">
                 <div class="progress-fill hide-on-loading" data-width="80%" style="width: 0%;"></div>
             </div>
         </div>
