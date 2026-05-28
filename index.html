@@ -854,7 +854,677 @@ html, body {
             font-weight: 500;
         }
 
-    </style>
+    /* --- FONTS & BASE VARS FOR REFERENCE --- */
+    :root {
+        --v-text-main: #1A1A1A;
+        --v-text-muted: #666666;
+        --v-accent-purple: #F4EDF7;
+        --v-accent-purple-dark: #8E759F;
+        --v-card-bg: #FFFFFF;
+        --v-bg-color: #FAF6F0;
+    }
+
+    /* 🎬 ULTRA-PREMIUM VORELIA AI REEL VIEWER */
+    .v-reel-container-modal {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #050505;
+        z-index: 10000;
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        overflow: hidden;
+    }
+
+    .v-reel-container-modal.v-reel-active {
+        display: flex;
+    }
+
+    .v-reel-video-viewport {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.9) 100%), 
+                    url('https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=600') no-repeat center center;
+        background-size: cover;
+        z-index: 1;
+    }
+
+    .v-reel-top-bar {
+        position: relative;
+        z-index: 2;
+        padding: calc(20px + env(safe-area-inset-top)) 20px 20px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #FFFFFF;
+    }
+
+    .v-reel-author-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .v-reel-author-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(255, 255, 255, 0.8);
+        object-fit: cover;
+        cursor: pointer;
+    }
+
+    .v-reel-author-meta h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .v-reel-author-meta p {
+        font-size: 10px;
+        color: rgba(255,255,255,0.65);
+        margin: 1px 0 0 0;
+    }
+
+    .v-reel-follow-badge {
+        background: #FFFFFF;
+        color: #000000;
+        border: none;
+        padding: 5px 12px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .v-reel-follow-badge.v-reel-following {
+        background: rgba(255, 255, 255, 0.2);
+        color: #FFFFFF;
+        backdrop-filter: blur(10px);
+    }
+
+    .v-reel-close-trigger {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #FFFFFF;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .v-reel-middle-layout {
+        position: relative;
+        z-index: 2;
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: flex-end;
+        padding: 0 16px 12px 16px;
+        gap: 16px;
+    }
+
+    .v-reel-caption-side {
+        color: #FFFFFF;
+    }
+
+    .v-reel-caption-text {
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 0 0 4px 0;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .v-reel-engagement-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .v-reel-engage-node {
+        background: none;
+        border: none;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 0;
+    }
+
+    .v-reel-icon-circle {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s ease;
+    }
+
+    .v-reel-engage-node:active .v-reel-icon-circle {
+        transform: scale(0.88);
+    }
+
+    .v-reel-engage-node span {
+        font-size: 11px;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .v-reel-bottom-products-wrapper {
+        position: relative;
+        z-index: 2;
+        padding: 0 16px calc(20px + env(safe-area-inset-bottom)) 16px;
+    }
+
+    .v-reel-smart-card-deck {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(30px) saturate(160%);
+        -webkit-backdrop-filter: blur(30px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 24px;
+        padding: 14px;
+    }
+
+    .v-reel-deck-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #FFFFFF;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+    }
+
+    .v-reel-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .v-reel-product-node {
+        background: rgba(255, 255, 255, 0.94);
+        border-radius: 16px;
+        padding: 10px 14px;
+        display: grid;
+        grid-template-columns: 42px 1fr auto;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .v-reel-node-img {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        background: #FFFFFF;
+        border-radius: 10px;
+        padding: 4px;
+    }
+
+    .v-reel-node-info h5 {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1A1A1A;
+        margin: 0;
+    }
+
+    .v-reel-node-info p {
+        font-size: 10px;
+        color: #666666;
+        margin: 1px 0 0 0;
+    }
+
+    .v-reel-match-glow-tag {
+        background: linear-gradient(135deg, #F3EDF7 0%, #8E759F 100%);
+        color: #FFFFFF;
+        padding: 6px 12px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: 0 4px 12px rgba(142, 117, 159, 0.3);
+    }
+
+
+    /* ⚜️ LUXURY VORELIA BEAUTY CREATOR PROFILE CONTAINER */
+    .v-creator-profile-modal {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100vh;
+        background-color: var(--v-bg-color);
+        z-index: 10001;
+        display: none;
+        flex-direction: column;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: calc(30px + env(safe-area-inset-bottom));
+    }
+
+    .v-creator-profile-modal.v-creator-active {
+        display: flex;
+    }
+
+    .v-creator-top-navigation {
+        position: absolute;
+        top: 0; left: 0; width: 100%;
+        background: transparent !important;
+        z-index: 10;
+        padding: calc(16px + env(safe-area-inset-top)) 20px 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .v-creator-glass-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #1A1A1A;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        transition: all 0.2s ease;
+    }
+    
+    .v-creator-glass-btn:active {
+        transform: scale(0.92);
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .v-creator-hero-card {
+        padding: calc(64px + env(safe-area-inset-top)) 20px 24px 20px !important;
+        background: linear-gradient(180deg, rgba(247, 239, 229, 0.4) 0%, #FFFFFF 100%) !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        border-bottom: 1px solid rgba(234, 229, 221, 0.5);
+    }
+
+    .v-creator-avatar-wrap {
+        position: relative;
+        margin-bottom: 14px;
+    }
+
+    .v-creator-large-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--v-accent-purple-dark);
+        padding: 3px;
+    }
+
+    .v-creator-rank-badge {
+        position: absolute;
+        bottom: -2px; right: -2px;
+        background-color: var(--v-text-main);
+        color: #FFFFFF;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 100px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .v-creator-identity h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--v-text-main);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .v-creator-identity p {
+        font-size: 12px;
+        color: var(--v-text-muted);
+        margin: 2px 0 0 0;
+    }
+
+    .v-creator-stats-row {
+        display: flex;
+        gap: 32px;
+        margin: 20px 0;
+    }
+
+    .v-creator-stat-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .v-creator-stat-node strong {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--v-text-main);
+    }
+
+    .v-creator-stat-node span {
+        font-size: 11px;
+        color: var(--v-text-muted);
+        margin-top: 2px;
+    }
+
+    .v-creator-actions-matrix {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 8px;
+        width: 100%;
+        max-width: 360px;
+        margin-top: 12px;
+    }
+
+    .v-creator-btn-follow-main {
+        background: #1A1A1A;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 14px;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .v-creator-btn-premium-action {
+        background: #FFFFFF;
+        color: #1A1A1A;
+        border: 1px solid #1A1A1A;
+        border-radius: 14px;
+        padding: 0 16px;
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .v-creator-btn-chat-icon {
+        background: #F4EDF7;
+        color: #8E759F;
+        border: none;
+        border-radius: 14px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .v-creator-feed-section {
+        padding: 20px 16px;
+        background-color: #fff;
+    }
+
+    .v-creator-section-title {
+        font-size: 14px;
+        font-weight: 700;
+        margin: 0 0 12px 0;
+        color: var(--v-text-main);
+        letter-spacing: -0.2px;
+    }
+
+    .v-creator-videos-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .v-creator-video-thumb {
+        aspect-ratio: 9/16;
+        background-size: cover;
+        background-position: center;
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .v-creator-video-views {
+        position: absolute;
+        bottom: 6px; left: 6px;
+        color: #FFFFFF;
+        font-size: 9px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: rgba(0,0,0,0.4);
+        padding: 2px 6px;
+        border-radius: 4px;
+        backdrop-filter: blur(4px);
+    }
+
+    .v-creator-products-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .v-creator-product-item {
+        background-color: #FFFFFF;
+        border: 1px solid rgba(234, 229, 221, 0.5);
+        border-radius: 16px;
+        padding: 12px;
+    }
+
+    .v-creator-prod-main-row {
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .v-creator-prod-img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+    }
+
+    .v-creator-prod-info h5 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--v-text-main);
+        margin: 0;
+    }
+
+    .v-creator-prod-info p {
+        font-size: 10px;
+        color: var(--v-text-muted);
+        margin: 2px 0 0 0;
+    }
+
+    .v-creator-match-pill {
+        background: linear-gradient(135deg, #F3EDF7 0%, #8E759F 100%);
+        color: #FFFFFF;
+        padding: 5px 10px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .v-creator-review-box {
+        margin-top: 10px;
+        background-color: var(--v-bg-color);
+        border-radius: 10px;
+        padding: 10px 12px;
+        border-left: 2px solid var(--v-accent-purple-dark);
+    }
+
+    .v-creator-review-box p {
+        font-size: 11px;
+        color: #4A4A4A;
+        line-height: 1.4;
+        font-style: italic;
+        margin: 0;
+    }
+
+    /* 🔽 PREMIUM SUBSCRIPTION DRAW SYSTEM */
+    .v-paywall-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 20000;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .v-paywall-sheet {
+        position: fixed;
+        bottom: 0; left: 0; width: 100%;
+        background: #FFFFFF;
+        border-radius: 32px 32px 0 0;
+        z-index: 20001;
+        padding: 20px 20px calc(30px + env(safe-area-inset-bottom)) 20px;
+        box-sizing: border-box;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .v-paywall-drag-handle {
+        width: 36px;
+        height: 5px;
+        background: #E0DCD3;
+        border-radius: 100px;
+        margin: 0 auto 18px auto;
+    }
+
+    .v-paywall-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .v-paywall-header h3 {
+        font-size: 20px;
+        margin: 0;
+        color: #1A1A1A;
+    }
+    .v-paywall-header p {
+        font-size: 12px;
+        color: #666666;
+        margin: 4px 0 0 0;
+    }
+
+    .v-paywall-perks-list {
+        background: #FAF6F0;
+        border-radius: 20px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .v-paywall-perk-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 12px;
+        color: #333333;
+        line-height: 1.4;
+    }
+    .v-paywall-perk-item i {
+        color: #8E759F;
+        margin-top: 1px;
+        flex-shrink: 0;
+    }
+
+    .v-paywall-tiers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+    .v-paywall-tier-card {
+        border: 2px solid #EAE5DD;
+        border-radius: 16px;
+        padding: 16px;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .v-paywall-tier-card.v-selected {
+        border-color: #8E759F;
+        background: #FAF9FB;
+    }
+    .v-paywall-tier-badge {
+        position: absolute;
+        top: -10px; left: 12px;
+        background: #8E759F;
+        color: #FFFFFF;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 100px;
+    }
+    .v-paywall-tier-card h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin: 0;
+        color: #1A1A1A;
+    }
+    .v-paywall-tier-card .v-price {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1A1A1A;
+        margin: 8px 0 2px 0;
+    }
+    .v-paywall-tier-card .v-period {
+        font-size: 10px;
+        color: #666666;
+    }
+
+    .v-paywall-submit-btn {
+        width: 100%;
+        background: #1A1A1A;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 16px;
+        padding: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+</style>
 </head>
 <body class="loading-active">
 <div id="top-loader"></div>
@@ -1012,7 +1682,7 @@ html, body {
         
         <div class="reels-scroll-row">
             <!-- Reel 1 -->
-            <div class="reel-card" onclick="alert('Playing Reel: Glass Skin Secret...')">
+            <div class="reel-card" onclick="openVReelEngine()">
                 <img class="reel-cover-img" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
                 <div class="reel-overlay">
                     <div class="reel-top-badge">
@@ -1027,7 +1697,7 @@ html, body {
             </div>
 
             <!-- Reel 2 -->
-            <div class="reel-card" onclick="alert('Playing Reel: Niacinamide Mistakes...')">
+            <div class="reel-card" onclick="openVReelEngine()">
                 <img class="reel-cover-img" src="https://images.unsplash.com/photo-1556229010-aa3f7ff66b24?auto=format&fit=crop&q=80&w=250" alt="Reel Cover">
                 <div class="reel-overlay">
                     <div class="reel-top-badge" style="background: rgba(244, 67, 54, 0.3);">
@@ -1142,6 +1812,79 @@ html, body {
         </a>
     </nav>
 
+
+<!-- LAYER A: ULTRA SMART REELS VIEWER MODAL -->
+<div class="v-reel-container-modal" id="voreliaProReelModal">
+    <div class="v-reel-video-viewport"></div>
+    
+    <div class="v-reel-top-bar">
+        <div class="v-reel-author-box">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150" class="v-reel-author-img" alt="Dr. Kiani" onclick="openCreatorProfile()">
+            <div class="v-reel-author-meta">
+                <h4 onclick="openCreatorProfile()">Dr. Elaheh <i data-lucide="badge-check" size="14" fill="#8E759F" style="color:white"></i></h4>
+                <p><strong>43k views</strong> • <strong>2h ago</strong></p>
+            </div>
+            <button class="v-reel-follow-badge" id="vReelFollowBtn" onclick="toggleVReelFollow()">Follow</button>
+        </div>
+        <button class="v-reel-close-trigger" onclick="closeVReelEngine()">
+            <i data-lucide="x" size="18"></i>
+        </button>
+    </div>
+
+    <div class="v-reel-middle-layout">
+        <div class="v-reel-caption-side">
+            <p class="v-reel-caption-text">
+                Testing morning formulation layers. Clinical compatibility analysis on hyper-sensitive barriers. 🧪✨
+            </p>
+        </div>
+        
+        <div class="v-reel-engagement-stack">
+            <button class="v-reel-engage-node" onclick="toggleVReelLike(this)">
+                <div class="v-reel-icon-circle"><i data-lucide="heart" size="20"></i></div>
+                <span>14.2K</span>
+            </button>
+            <button class="v-reel-engage-node" onclick="alert('Opening Smart Comments Matrix...')">
+                <div class="v-reel-icon-circle"><i data-lucide="message-circle" size="20"></i></div>
+                <span>382</span>
+            </button>
+            <button class="v-reel-engage-node" onclick="alert('Routine formula mapped and cloned to profile!')">
+                <div class="v-reel-icon-circle"><i data-lucide="folder-plus" size="20" style="color:#FFE0B2"></i></div>
+                <span>Save</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="v-reel-bottom-products-wrapper">
+        <div class="v-reel-smart-card-deck">
+            <div class="v-reel-deck-header">
+                <i data-lucide="sparkles" size="12" fill="currentColor"></i>
+                <span>Detected Products & Match Score</span>
+            </div>
+            <div class="v-reel-items-list">
+                <div class="v-reel-product-node">
+                    <img src="s2.png" class="v-reel-node-img" alt="Product">
+                    <div class="v-reel-node-info">
+                        <h5>The Ordinary Niacinamide 10%</h5>
+                        <p>Treatment • Pore Minimizer</p>
+                    </div>
+                    <div class="v-reel-match-glow-tag">
+                        <i data-lucide="dna" size="11"></i> <span>94% Match</span>
+                    </div>
+                </div>
+                <div class="v-reel-product-node">
+                    <img src="s5.png" class="v-reel-node-img" alt="Product">
+                    <div class="v-reel-node-info">
+                        <h5>La Roche-Posay Toleriane</h5>
+                        <p>Moisturizer • Skin Barrier Repair</p>
+                    </div>
+                    <div class="v-reel-match-glow-tag" style="background: linear-gradient(135deg, #FFE0B2 0%, #F57C00 100%);">
+                        <i data-lucide="dna" size="11"></i> <span>88% Match</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
@@ -1183,6 +1926,42 @@ html, body {
     setTimeout(()=> {
         window.location.href = url;
     }, 700);
+}
+ function openVReelEngine() {
+    const modal = document.getElementById('voreliaProReelModal');
+    modal.classList.add('v-reel-active');
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+function closeVReelEngine() {
+    const modal = document.getElementById('voreliaProReelModal');
+    modal.classList.remove('v-reel-active');
+}
+
+function toggleVReelFollow() {
+    const btn = document.getElementById('vReelFollowBtn');
+    if (btn.classList.contains('v-reel-following')) {
+        btn.classList.remove('v-reel-following');
+        btn.innerText = 'Follow';
+    } else {
+        btn.classList.add('v-reel-following');
+        btn.innerText = 'Following';
+    }
+}
+
+function toggleVReelLike(button) {
+    const icon = button.querySelector('i');
+    if (icon.getAttribute('fill') === 'currentColor') {
+        icon.removeAttribute('fill');
+        button.querySelector('span').innerText = '14.2K';
+        icon.style.color = '#FFFFFF';
+    } else {
+        icon.setAttribute('fill', 'currentColor');
+        icon.style.color = '#E53935';
+        button.querySelector('span').innerText = '14.3K';
+    }
 }
     </script>
 </body>
